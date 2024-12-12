@@ -15,9 +15,10 @@ class OrderCancelledNotification extends Notification implements ShouldQueue
      * Create a new notification instance.
      */
     public function __construct(
-        private string $reference,
-        private string $url,
-    ) {}
+        public string $reference,
+        public string $url,
+    ) {
+    }
 
     /**
      * Get the notification's delivery channels.
@@ -36,7 +37,7 @@ class OrderCancelledNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('Order cancelled')
-            ->line('Your order ' . $this->reference . ' has been cancelled.')
+            ->line('Your order '.$this->reference.' has been cancelled.')
             ->action('Check my order status', $this->url);
     }
 

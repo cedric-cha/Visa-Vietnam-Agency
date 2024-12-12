@@ -9,15 +9,13 @@
             <div class="col-md-7">
                 <div class="card border-0 p-3">
                     <div class="card-body">
-                        <p class="fw-bold">1. Contact Information</p>
+                        <p class="fw-bold">Contact Information</p>
 
                         <div class="row mb-3">
                             <div class="col-md mb-3 mb-md-0">
                                 <label for="full_name" class="form-label">Full name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Enter full name" value="{{ old('full_name') }}" required autofocus>
-                                @error('full_name')
-                                <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                @enderror
+                                <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Enter full name" required autofocus>
+                                <div class="invalid-feedback full_name-error" style="display: none"></div>
                             </div>
 
                             <div class="col-md">
@@ -25,22 +23,20 @@
                                 <select class="form-select" id="country" name="country" required>
                                     <option value="">Select country</option>
                                     @foreach ($countries as $country)
-                                        <option value="{{ $country->id }}" {{ old('country') === (string) $country->id ? 'selected' : '' }}>{{ $country->name }}</option>
+                                        <option value="{{ $country->id }}"
+                                            {{ old('country') === (string) $country->id ? 'selected' : '' }}>
+                                            {{ $country->name }}</option>
                                     @endforeach
                                 </select>
-                                @error('country')
-                                <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                @enderror
+                                <div class="invalid-feedback country-error" style="display: none"></div>
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md mb-3 mb-md-0">
                                 <label for="date_of_birth" class="form-label">Date of Birth <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" placeholder="Enter date of birth" value="{{ old('date_of_birth') }}" required>
-                                @error('date_of_birth')
-                                <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                @enderror
+                                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" placeholder="Enter date of birth" required>
+                                <div class="invalid-feedback date_of_birth-error" style="display: none"></div>
                             </div>
 
                             <div class="col-md">
@@ -48,63 +44,53 @@
                                 <select class="form-select" id="gender" name="gender" required>
                                     <option value="">Select gender</option>
                                     @foreach ($genders as $gender)
-                                        <option value="{{ $gender }}" {{ old('gender') === $gender ? 'selected' : '' }}>{{ ucfirst($gender) }}</option>
+                                        <option value="{{ $gender }}"
+                                            {{ old('gender') === $gender ? 'selected' : '' }}>{{ ucfirst($gender) }}
+                                        </option>
                                     @endforeach
                                 </select>
-                                @error('gender')
-                                <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                @enderror
+                                <div class="invalid-feedback gender-error" style="display: none"></div>
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md mb-3 mb-md-0">
                                 <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" value="{{ old('email') }}" required>
-                                @error('email')
-                                <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                @enderror
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" required>
+                                <div class="invalid-feedback email-error" style="display: none"></div>
                             </div>
 
                             <div class="col-md">
                                 <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="address" name="address" placeholder="Enter address" value="{{ old('address') }}" required>
-                                @error('address')
-                                <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                @enderror
+                                <input type="text" class="form-control" id="address" name="address" placeholder="Enter address" required>
+                                <div class="invalid-feedback address-error" style="display: none"></div>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md mb-3 mb-md-0">
                                 <label for="phone_number" class="form-label">Phone Number <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Enter phone number" value="{{ old('phone_number') }}" required>
-                                @error('phone_number')
-                                <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                @enderror
+                                <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Enter phone number" required>
+                                <div class="invalid-feedback phone_number-error" style="display: none"></div>
                             </div>
                             <div class="col-md"></div>
                         </div>
 
-                        <p class="fw-bold mt-4">2. Passport Information</p>
+                        <p class="fw-bold mt-4">Passport Information</p>
 
                         <div class="row mb-3">
                             <div class="col-md mb-3 mb-md-0">
                                 <div class="form-group">
                                     <label for="passport_number" class="form-label">Passport Number <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="passport_number" name="passport_number" placeholder="Enter passport number" value="{{ old('passport_number') }}" required>
-                                    @error('passport_number')
-                                    <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" class="form-control" id="passport_number" name="passport_number" placeholder="Enter passport number" required>
+                                    <div class="invalid-feedback passport_number-error" style="display: none"></div>
                                 </div>
                             </div>
                             <div class="col-md">
                                 <div class="form-group">
-                                    <label for="passport_expiration_date" class="form-label">Passport Expiration Date <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" id="passport_expiration_date" name="passport_expiration_date" placeholder="Enter passport expiry" value="{{ old('passport_expiration_date') }}" required>
-                                    @error('passport_expiration_date')
-                                    <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                    @enderror
+                                    <label for="passport_expiration_date" class="form-label">Passport Expiration Date<span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="passport_expiration_date" name="passport_expiration_date" placeholder="Enter passport expiry" required>
+                                    <div class="invalid-feedback passport_expiration_date-error" style="display: none"></div>
                                 </div>
                             </div>
                         </div>
@@ -113,107 +99,164 @@
                             <div class="col-md mb-3 mb-md-0">
                                 <div class="form-group mb-3">
                                     <label for="photo" class="form-label">Portrait Photo <span class="text-danger">*</span></label>
-                                    <input type="file" class="form-control" id="photo" name="photo" accept="image/*" required value="{{ old('photo') }}">
-                                    @error('photo')
-                                    <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                    @enderror
+                                    <input type="file" class="form-control" id="photo" name="photo" accept="image/*" required>
+                                    <div class="invalid-feedback photo-error" style="display: none"></div>
                                 </div>
                                 <div class="position-relative" id="photo_preview"></div>
                             </div>
                             <div class="col-md">
                                 <div class="form-group mb-3">
                                     <label for="passport_image" class="form-label">Passport Image <span class="text-danger">*</span></label>
-                                    <input type="file" class="form-control" id="passport_image" name="passport_image" accept="image/*" required value="{{ old('passport_image') }}">
-                                    @error('passport_image')
-                                    <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                    @enderror
+                                    <input type="file" class="form-control" id="passport_image" name="passport_image" accept="image/*" required>
+                                    <div class="invalid-feedback passport_image-error" style="display: none"></div>
                                 </div>
                                 <div class="position-relative" id="passport_image_preview"></div>
                             </div>
                         </div>
 
-                        <p class="fw-bold mt-4">3. Visa Options</p>
+                        <p class="fw-bold mt-4">Flight Information</p>
 
-                        <div class="row mb-3">
-                            <div class="col-md mb-3 mb-md-0">
-                                <label for="processing_time_id" class="form-label">Processing Time <span class="text-danger">*</span></label>
-                                <select class="form-select" id="processing_time_id" name="processing_time_id" required>
-                                    <option value="">Select processing time</option>
-                                    @foreach ($processingTime as $option)
-                                        <option value="{{ $option->id }}" {{ old('processing_time_id') == $option->id ? 'selected' : '' }}>{{ $option->description }}</option>
-                                    @endforeach
-                                </select>
-                                @error('processing_time_id')
-                                <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                @enderror
+                        <div class="form-group mb-3">
+                            <label for="flight_ticket_image" class="form-label">Flight Ticket Image <span class="text-danger">*</span></label>
+                            <input type="file" class="form-control" id="flight_ticket_image" name="flight_ticket_image" accept="image/*">
+                            <div class="invalid-feedback flight_ticket_image-error" style="display: none"></div>
+                        </div>
+                        <div class="position-relative" id="flight_ticket_image_preview"></div>
+
+                        <p class="fw-bold mt-4">What service are you interested in ?</p>
+
+                        <div class="mb-3">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="service" id="evisa-service" value="evisa" checked>
+                                <label class="form-check-label" for="evisa-service">E-Visa service</label>
                             </div>
-
-                            <div class="col-md">
-                                <label for="purpose_id" class="form-label">Purpose <span class="text-danger">*</span></label>
-                                <select class="form-select" id="purpose_id" name="purpose_id" required>
-                                    <option value="">Select purpose</option>
-                                    @foreach ($purposes as $option)
-                                        <option value="{{ $option->id }}" {{ old('purpose_id') == $option->id ? 'selected' : '' }}>
-                                            {{ $option->description }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('purpose_id')
-                                <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                @enderror
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="service" id="fast-track-service" value="fast_track">
+                                <label class="form-check-label" for="fast-track-service">Fast Track service</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="service" id="evisa-fast-track-service" value="evisa_fast_track">
+                                <label class="form-check-label" for="evisa-fast-track-service">E-Visa + Fast Track service</label>
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md mb-3 mb-md-0">
-                                <label for="visa_type_id" class="form-label">Visa Type <span class="text-danger">*</span></label>
-                                <select class="form-select" id="visa_type_id" name="visa_type_id" required>
-                                    <option value="">Select visa type</option>
-                                    @foreach ($visaTypes as $option)
-                                        <option value="{{ $option->id }}" {{ old('visa_type_id') == $option->id ? 'selected' : '' }}>
-                                            {{ $option->description }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('visa_type_id')
-                                <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                @enderror
+                        <div id="evisa-service-options" style="{{ !str_contains(old('service', 'evisa'), 'evisa') ? 'display: none' : "" }}">
+                            <p class="fw-bold mt-4">Visa Options</p>
+
+                            <div class="row mb-3">
+                                <div class="col-md mb-3 mb-md-0">
+                                    <label for="processing_time_id" class="form-label">Processing Time <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="processing_time_id" name="processing_time_id">
+                                        <option value="">Select processing time</option>
+                                        @foreach ($processingTime as $option)
+                                            <option value="{{ $option->id }}"
+                                                {{ old('processing_time_id') == $option->id ? 'selected' : '' }}>
+                                                {{ $option->description }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback processing_time_id-error" style="display: none"></div>
+                                </div>
+
+                                <div class="col-md">
+                                    <label for="purpose_id" class="form-label">Purpose <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="purpose_id" name="purpose_id">
+                                        <option value="">Select purpose</option>
+                                        @foreach ($purposes as $option)
+                                            <option value="{{ $option->id }}"
+                                                {{ old('purpose_id') == $option->id ? 'selected' : '' }}>
+                                                {{ $option->description }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback purpose_id-error" style="display: none"></div>
+                                </div>
                             </div>
 
-                            <div class="col-md">
-                                <label for="entry_port_id" class="form-label">Entry Port <span class="text-danger">*</span></label>
-                                <select class="form-select" id="entry_port_id" name="entry_port_id" required>
+                            <div class="row mb-3">
+                                <div class="col-md mb-3 mb-md-0">
+                                    <label for="visa_type_id" class="form-label">Visa Type <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="visa_type_id" name="visa_type_id">
+                                        <option value="">Select visa type</option>
+                                        @foreach ($visaTypes as $option)
+                                            <option value="{{ $option->id }}"
+                                                {{ old('visa_type_id') == $option->id ? 'selected' : '' }}>
+                                                {{ $option->description }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback visa_type_id-error" style="display: none"></div>
+                                </div>
+
+                                <div class="col-md">
+                                    <label for="entry_port_id" class="form-label">Entry Port <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="entry_port_id" name="entry_port_id">
+                                        <option value="">Select entry port</option>
+                                        @foreach ($entryPorts as $group)
+                                            <optgroup label="{{ $group['type'] }}">
+                                                @foreach ($group['entryPorts'] as $entryPort)
+                                                    <option value="{{ $entryPort['id'] }}"
+                                                        {{ old('entry_port_id') === (string) $entryPort['id'] ? 'selected' : '' }}>
+                                                        {{ $entryPort['name'] }}
+                                                    </option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback entry_port_id-error" style="display: none"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md mb-3 mb-md-0">
+                                    <label for="arrival_date" class="form-label">Arrival date <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="arrival_date" name="arrival_date" placeholder="Enter arrival date">
+                                    <div class="invalid-feedback arrival_date-error" style="display: none"></div>
+                                </div>
+                                <div class="col-md">
+                                    <label for="departure_date" class="form-label">Departure date <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="departure_date" name="departure_date" placeholder="Enter departure date">
+                                    <div class="invalid-feedback arrival_date-error" style="display: none"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="fast-track-service-options" style="{{ !str_contains(old('service', 'evisa'), 'fast_track') ? 'display: none' : "" }}">
+                            <p class="fw-bold mt-4">Fast Track Options</p>
+
+                            <div class="mb-3">
+                                <label for="fast_track_entry_port_id" class="form-label">Entry Port <span class="text-danger">*</span></label>
+                                <select class="form-select" id="fast_track_entry_port_id" name="fast_track_entry_port_id">
                                     <option value="">Select entry port</option>
-                                    @foreach ($entryPorts as $group)
-                                        <optgroup label="{{ $group['type'] }}">
-                                            @foreach ($group['entryPorts'] as $entryPort)
-                                                <option value="{{ $entryPort['id'] }}" {{ old('entry_port_id') === (string) $entryPort['id'] ? 'selected' : '' }}>
-                                                    {{ $entryPort['name'] }}
-                                                </option>
-                                            @endforeach
-                                        </optgroup>
+                                    @foreach ($fastTrackEntryPorts as $entryPort)
+                                        <option value="{{ $entryPort->id }}"
+                                            {{ old('fast_track_entry_port_id') === (string) $entryPort->id ? 'selected' : '' }}>
+                                            {{ $entryPort->name }}
+                                        </option>
                                     @endforeach
                                 </select>
-                                @error('entry_port_id')
-                                <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                @enderror
+                                <div class="invalid-feedback fast_track_entry_port_id-error" style="display: none"></div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md mb-3 mb-md-0">
-                                <label for="arrival_date" class="form-label">Arrival date <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="arrival_date" name="arrival_date" placeholder="Enter arrival date" required value="{{ old('arrival_date') }}">
-                                @error('arrival_date')
-                                <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md">
-                                <label for="departure_date" class="form-label">Departure date <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="departure_date" name="departure_date" placeholder="Enter departure date" required value="{{ old('departure_date') }}">
-                                @error('departure_date')
-                                <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                                @enderror
+                            <div class="row">
+                                <div class="col-md mb-3 mb-md-0">
+                                    <label for="fast_track_date" class="form-label">Date <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="fast_track_date" name="fast_track_date" placeholder="Enter date">
+                                    <div class="invalid-feedback fast_track_date-error" style="display: none"></div>
+                                </div>
+                                <div class="col-md">
+                                    <label for="time_slot_id" class="form-label">Time <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="time_slot_id" name="time_slot_id">
+                                        <option value="">Select time</option>
+                                        @foreach ($timeSlots as $timeSlot)
+                                            <option value="{{ $timeSlot->id }}"
+                                                {{ old('time_slot_id') === (string) $timeSlot->id ? 'selected' : '' }}>
+                                                {{ $timeSlot->name }} ({{ $timeSlot->start_time }} to
+                                                {{ $timeSlot->end_time }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback time_slot_id-error" style="display: none"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -221,96 +264,144 @@
             </div>
 
             <div class="col-md-5 my-3 my-md-0">
-                <div class="card border-0 p-3 sticky-top">
-                    <div class="card-body">
-                        <p class="fw-bold">Checkout Summary</p>
+                <div class="sticky-top">
+                    <div class="card border-0 p-3 sticky-top">
+                        <div class="card-body">
+                            <p class="fw-bold">Checkout Summary</p>
 
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between">
-                                <p class="mb-0">Arrival date</p>
-                                <p class="mb-0" style="color: #118793;" id="selected_arrival_date">N/A</p>
+                            <div class="mb-3">
+                                <p class="fw-bold mb-0">E-Visa service</p>
+
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">Arrival date</p>
+                                    <p class="mb-0" style="color: #118793;" id="selected_arrival_date">N/A</p>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">Departure date</p>
+                                    <p class="mb-0" style="color: #118793;" id="selected_departure_date">N/A</p>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">Entry port</p>
+                                    <p class="mb-0" style="color: #118793;" id="selected_entry_port">N/A</p>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">Processing Time</p>
+                                    <p class="mb-0" style="color: #118793;">
+                                        <span id="processing_time_description">N/A</span> + $<span
+                                            id="processing_time_fees">0.00</span>
+                                    </p>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">Purpose</p>
+                                    <p class="mb-0" style="color: #118793;">
+                                        <span id="purpose_description">N/A</span> + $<span id="purpose_fees">0.00</span>
+                                    </p>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">Visa Type</p>
+                                    <p class="mb-0" style="color: #118793;">
+                                        <span id="visa_type_description">N/A</span> + $<span id="visa_type_fees">0.00</span>
+                                    </p>
+                                </div>
                             </div>
 
-                            <div class="d-flex justify-content-between">
-                                <p class="mb-0">Departure date</p>
-                                <p class="mb-0" style="color: #118793;" id="selected_departure_date">N/A</p>
-                            </div>
+                            <hr>
 
-                            <div class="d-flex justify-content-between">
-                                <p class="mb-0">Entry port</p>
-                                <p class="mb-0" style="color: #118793;" id="selected_entry_port">N/A</p>
+                            <div class="mb-3">
+                                <p class="fw-bold mb-0">Fast Track service</p>
+
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">Entry port</p>
+                                    <p class="mb-0" style="color: #118793;" id="selected_fast_track_entry_port">N/A</p>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">Date</p>
+                                    <p class="mb-0" style="color: #118793;" id="selected_fast_track_date">N/A</p>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">Time</p>
+                                    <p class="mb-0" style="color: #118793;">
+                                        <span id="time_slot_description">N/A</span> + $<span id="time_slot_fees">0.00</span>
+                                    </p>
+                                </div>
                             </div>
 
                             <hr>
 
                             <div class="d-flex justify-content-between">
-                                <p class="mb-0">Processing Time</p>
+                                <p class="fw-bold mb-0">Sub-total</p>
                                 <p class="mb-0" style="color: #118793;">
-                                    <span id="processing_time_description">N/A</span> + $<span id="processing_time_fees">0.00</span>
+                                    $<span id="total_fees">0.00</span>
                                 </p>
                             </div>
 
                             <div class="d-flex justify-content-between">
-                                <p class="mb-0">Purpose</p>
+                                <p class="fw-bold mb-0">Discount</p>
+                                <p class="mb-0" style="color: #118793;" id="discount">-0%</p>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-3">
+                                <p class="fw-bold mb-0">Total</p>
                                 <p class="mb-0" style="color: #118793;">
-                                    <span id="purpose_description">N/A</span> + $<span id="purpose_fees">0.00</span>
+                                    $<span id="total_fees_discount">0.00</span>
                                 </p>
                             </div>
 
-                            <div class="d-flex justify-content-between">
-                                <p class="mb-0">Visa Type</p>
-                                <p class="mb-0" style="color: #118793;">
-                                    <span id="visa_type_description">N/A</span> + $<span id="visa_type_fees">0.00</span>
-                                </p>
+                            <div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <input type="text" class="form-control me-1" id="voucher" name="voucher" placeholder="Enter voucher code">
+                                    <button type="button" class="btn text-white ms-1" style="background-color: #118793" id="voucher-button">Apply</button>
+                                </div>
+                                <div class="invalid-feedback voucher-error" style="display: none"></div>
+                            </div>
+
+                            <div class="mt-3 p-3" style="background-color: #F1F1F1;">
+                                <div class="form-check mb-3">
+                                    <input type="checkbox" class="form-check-input" id="termsCheck">
+                                    <label for="termsCheck" class="form-check-label">
+                                        <span>I have read and understood the</span>
+                                        <a href="#" class="text-decoration-none" target="_blank" style="color: #118793;">Terms and Agreements</a>
+                                    </label>
+                                </div>
+
+{{--                                <div class="mb-3">--}}
+{{--                                    <div class="d-flex align-items-center justify-content-between">--}}
+{{--                                        <img src="{{ captcha_src('math') }}" alt="captcha">--}}
+{{--                                        <input type="text" name="captcha" class="form-control ms-3" placeholder="">--}}
+{{--                                    </div>--}}
+{{--                                    <div class="invalid-feedback captcha-error" style="display: none"></div>--}}
+{{--                                </div>--}}
+
+                                <button type="submit" class="btn w-100" style="background-color: #118793" disabled id="order-form-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi bi-credit-card-fill" viewBox="0 0 16 16">
+                                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1H0zm0 3v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7zm3 2h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1" />
+                                    </svg>
+                                    <span class="ms-2 text-white">Confirm payment</span>
+                                </button>
                             </div>
                         </div>
+                    </div>
 
-                        <hr>
+                    <div class="card border-0 mt-3 p-3">
+                        <div class="card-body">
+                            <p class="fw-bold">How did you hear about us ?</p>
 
-                        <div class="d-flex justify-content-between">
-                            <p class="mb-0">Sub-total</p>
-                            <p class="mb-0" style="color: #118793;">
-                                $<span id="total_fees">0.00</span>
-                            </p>
-                        </div>
-
-                        <div class="d-flex justify-content-between">
-                            <p class="mb-0">Discount</p>
-                            <p class="mb-0" style="color: #118793;" id="discount">-0%</p>
-                        </div>
-
-                        <div class="d-flex justify-content-between mb-3">
-                            <p class="mb-0">Total</p>
-                            <p class="mb-0" style="color: #118793;">
-                                $<span id="total_fees_discount">0.00</span>
-                            </p>
-                        </div>
-
-                        <div>
                             <div class="d-flex align-items-center justify-content-between">
-                                <input type="text" class="form-control me-1" id="voucher" name="voucher" placeholder="Enter voucher code" value="{{ old('voucher') }}">
-                                <button type="button" class="btn text-white ms-1" style="background-color: #118793" id="voucher-button">Apply</button>
+                                <select class="form-select me-1" id="feedback">
+                                    <option value="">Select an option</option>
+                                    @foreach ($feedbacks as $feedback)
+                                        <option value="{{ $feedback->id }}">{{ $feedback->title }}</option>
+                                    @endforeach
+                                </select>
+                                <button type="button" class="btn text-white ms-1" style="background-color: #118793" id="feedback-button">Submit</button>
                             </div>
-                            @error('voucher')
-                            <div class="invalid-feedback text-danger d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mt-3 p-3" style="background-color: #F1F1F1;">
-                            <div class="form-check mb-3">
-                                <input type="checkbox" class="form-check-input" id="termsCheck">
-                                <label for="termsCheck" class="form-check-label">
-                                    <span>I have read and understood the</span>
-                                    <a href="#" class="text-decoration-none" target="_blank" style="color: #118793;">Terms and Agreements</a>
-                                </label>
-                            </div>
-
-                            <button type="submit" class="btn w-100" style="background-color: #118793" disabled id="order-form-button">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi bi-credit-card-fill" viewBox="0 0 16 16">
-                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1H0zm0 3v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7zm3 2h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1"/>
-                                </svg>
-                                <span class="ms-2 text-white">Confirm payment</span>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -322,26 +413,41 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const getTotalFees = ()  => {
+            const getTotalFees = () => {
                 const totalFees = parseInt(document.querySelector('#processing_time_fees').textContent) +
                     parseInt(document.querySelector('#purpose_fees').textContent) +
-                    parseInt(document.querySelector('#visa_type_fees').textContent)
+                    parseInt(document.querySelector('#visa_type_fees').textContent) +
+                    parseInt(document.querySelector('#time_slot_fees').textContent)
 
                 return totalFees.toFixed(2)
             }
 
             if (document.querySelector('#arrival_date').value) {
-                document.querySelector('#selected_arrival_date').textContent = moment(document.querySelector('#arrival_date').value).format('ll')
+                document.querySelector('#selected_arrival_date').textContent = moment(document.querySelector(
+                    '#arrival_date').value).format('ll')
             }
 
             if (document.querySelector('#departure_date').value) {
-                document.querySelector('#selected_departure_date').textContent = moment(document.querySelector('#departure_date').value).format('ll')
+                document.querySelector('#selected_departure_date').textContent = moment(document.querySelector(
+                    '#departure_date').value).format('ll')
+            }
+
+            if (document.querySelector('#fast_track_date').value) {
+                document.querySelector('#selected_fast_track_date').textContent = moment(document.querySelector(
+                    '#fast_track_date').value).format('ll')
             }
 
             if (document.querySelector('#entry_port_id').value) {
                 fetch("{{ url('/api/entry-ports') }}/" + document.querySelector('#entry_port_id').value)
                     .then(res => res.json())
-                    .then(data => document.querySelector('#selected_entry_port').textContent = `(${data.type}) ` + data.name)
+                    .then(data => document.querySelector('#selected_entry_port').textContent = `(${data.type}) ` +
+                        data.name)
+            }
+
+            if (document.querySelector('#fast_track_entry_port_id').value) {
+                fetch("{{ url('/api/entry-ports') }}/" + document.querySelector('#fast_track_entry_port_id').value)
+                    .then(res => res.json())
+                    .then(data => document.querySelector('#selected_fast_track_entry_port').textContent = data.name)
             }
 
             if (document.querySelector('#processing_time_id').value) {
@@ -355,6 +461,19 @@
                         document.querySelector('#voucher-button').click();
                     });
             }
+
+            if (document.querySelector('#time_slot_id').value) {
+                fetch("{{ url('/api/time-slots') }}/" + document.querySelector('#time_slot_id').value)
+                    .then(res => res.json())
+                    .then(data => {
+                        document.querySelector('#time_slot_description').textContent = data.name + `(${data.start_time} to ${data.end_time})`;
+                        document.querySelector('#time_slot_fees').textContent = data.fees.toFixed(2);
+                        document.querySelector('#total_fees').textContent = getTotalFees();
+                        document.querySelector('#total_fees_discount').textContent = getTotalFees();
+                        document.querySelector('#voucher-button').click();
+                    });
+            }
+
 
             if (document.querySelector('#purpose_id').value) {
                 fetch("{{ url('/api/purposes') }}/" + document.querySelector('#purpose_id').value)
@@ -387,7 +506,8 @@
                     if (document.querySelector('#voucher').value === '') {
                         document.querySelector('#total_fees_discount').textContent = getTotalFees()
                     } else {
-                        document.querySelector('#voucher-button').innerHTML = '<div class="spinner-border spinner-border-sm text-light" role="status"></div>'
+                        document.querySelector('#voucher-button').innerHTML =
+                            '<div class="spinner-border spinner-border-sm text-light" role="status"></div>'
 
                         fetch("{{ url('/api/voucher') }}/" + document.querySelector('#voucher').value)
                             .then(res => res.json())
@@ -401,18 +521,44 @@
                                 const totalFeesDiscount = totalFees - ((discount * totalFees) / 100)
 
                                 document.querySelector('#discount').textContent = `-${discount}%`
-                                document.querySelector('#total_fees_discount').textContent = `${totalFeesDiscount.toFixed(2)}`
+                                document.querySelector('#total_fees_discount').textContent =
+                                    `${totalFeesDiscount.toFixed(2)}`
                             })
                             .finally(() => document.querySelector('#voucher-button').innerHTML = 'Apply')
                     }
                 })
 
             document
-                .querySelector('#order-form')
-                .addEventListener('submit', e => {
+                .querySelector('#feedback-button')
+                .addEventListener('click', () => {
+                    if (document.querySelector('#feedback').value !== '') {
+                        document.querySelector('#feedback-button').innerHTML =
+                            '<div class="spinner-border spinner-border-sm text-light" role="status"></div>'
+
+                        fetch("{{ url('/api/feedback') }}/" + document.querySelector('#feedback').value)
+                            .then(res => res.json())
+                            .then(data => displayAlertMessage(data.message, data.status))
+                            .finally(() => {
+                                document.querySelector('#feedback-button').innerHTML = 'Submit'
+                                document.querySelector('#feedback').value = ''
+                            })
+                    }
+                })
+
+            // document
+            //     .querySelector('#order-form')
+            //     .addEventListener('submit', e => {
+            //         e.preventDefault()
+            //         document.querySelector('#order-form-button').innerHTML =
+            //             '<div class="spinner-border spinner-border-sm text-light" role="status"></div>'
+            //         e.target.submit()
+            //     })
+
+            document
+                .querySelector('#order-form-button')
+                .addEventListener('click', e => {
                     e.preventDefault()
-                    document.querySelector('#order-form-button').innerHTML = '<div class="spinner-border spinner-border-sm text-light" role="status"></div>'
-                    e.target.submit()
+                    sendRequest(document.querySelector('#order-form'), e.target)
                 })
 
             document
@@ -432,6 +578,14 @@
                 })
 
             document
+                .querySelector('#flight_ticket_image')
+                .addEventListener('change', e => {
+                    document.querySelector('#flight_ticket_image_preview').innerHTML = `
+                        <img src="${URL.createObjectURL(e.target.files[0])}" width="300" alt="Flight ticket image"/>
+                    `
+                })
+
+            document
                 .querySelector('#termsCheck')
                 .addEventListener('change', e => {
                     document.querySelector('#order-form-button').disabled = !e.target.checked
@@ -440,13 +594,22 @@
             document
                 .querySelector('#arrival_date')
                 .addEventListener('change', e => {
-                    document.querySelector('#selected_arrival_date').textContent = moment(e.target.value).format('ll')
+                    document.querySelector('#selected_arrival_date').textContent = moment(e.target.value)
+                        .format('ll')
                 })
 
             document
                 .querySelector('#departure_date')
                 .addEventListener('change', e => {
-                    document.querySelector('#selected_departure_date').textContent = moment(e.target.value).format('ll')
+                    document.querySelector('#selected_departure_date').textContent = moment(e.target.value)
+                        .format('ll')
+                })
+
+            document
+                .querySelector('#fast_track_date')
+                .addEventListener('change', e => {
+                    document.querySelector('#selected_fast_track_date').textContent = moment(e.target.value)
+                        .format('ll')
                 })
 
             document
@@ -455,7 +618,19 @@
                     if (e.target.value) {
                         fetch("{{ url('/api/entry-ports') }}/" + e.target.value)
                             .then(res => res.json())
-                            .then(data => document.querySelector('#selected_entry_port').textContent = `(${data.type}) ` + data.name)
+                            .then(data => document.querySelector('#selected_entry_port').textContent =
+                                `(${data.type}) ` + data.name)
+                    }
+                })
+
+            document
+                .querySelector('#fast_track_entry_port_id')
+                .addEventListener('change', e => {
+                    if (e.target.value) {
+                        fetch("{{ url('/api/entry-ports') }}/" + e.target.value)
+                            .then(res => res.json())
+                            .then(data => document.querySelector('#selected_fast_track_entry_port')
+                                .textContent = data.name)
                     }
                 })
 
@@ -466,8 +641,28 @@
                         fetch("{{ url('/api/processing-time') }}/" + e.target.value)
                             .then(res => res.json())
                             .then(data => {
-                                document.querySelector('#processing_time_description').textContent = data.description
-                                document.querySelector('#processing_time_fees').textContent = data.fees.toFixed(2)
+                                document.querySelector('#processing_time_description').textContent = data
+                                    .description
+                                document.querySelector('#processing_time_fees').textContent = data.fees
+                                    .toFixed(2)
+                                document.querySelector('#total_fees').textContent = getTotalFees()
+                                document.querySelector('#total_fees_discount').textContent = getTotalFees()
+                                document.querySelector('#voucher-button').click()
+                            })
+                    }
+                })
+
+            document
+                .querySelector('#time_slot_id')
+                .addEventListener('change', e => {
+                    if (e.target.value) {
+                        fetch("{{ url('/api/time-slots') }}/" + e.target.value)
+                            .then(res => res.json())
+                            .then(data => {
+                                document.querySelector('#time_slot_description').textContent = data.name +
+                                    `(${data.start_time} to ${data.end_time})`
+                                document.querySelector('#time_slot_fees').textContent = data.fees
+                                    .toFixed(2)
                                 document.querySelector('#total_fees').textContent = getTotalFees()
                                 document.querySelector('#total_fees_discount').textContent = getTotalFees()
                                 document.querySelector('#voucher-button').click()
@@ -482,7 +677,8 @@
                         fetch("{{ url('/api/purposes') }}/" + e.target.value)
                             .then(res => res.json())
                             .then(data => {
-                                document.querySelector('#purpose_description').textContent = data.description
+                                document.querySelector('#purpose_description').textContent = data
+                                    .description
                                 document.querySelector('#purpose_fees').textContent = data.fees.toFixed(2)
                                 document.querySelector('#total_fees').textContent = getTotalFees()
                                 document.querySelector('#total_fees_discount').textContent = getTotalFees()
@@ -498,13 +694,105 @@
                         fetch("{{ url('/api/visa-types') }}/" + e.target.value)
                             .then(res => res.json())
                             .then(data => {
-                                document.querySelector('#visa_type_description').textContent = data.description
+                                document.querySelector('#visa_type_description').textContent = data
+                                    .description
                                 document.querySelector('#visa_type_fees').textContent = data.fees.toFixed(2)
                                 document.querySelector('#total_fees').textContent = getTotalFees()
                                 document.querySelector('#total_fees_discount').textContent = getTotalFees()
                                 document.querySelector('#voucher-button').click()
                             })
                     }
+                })
+
+            document
+                .querySelectorAll('input[name="service"]')
+                .forEach(el => {
+                    el.addEventListener('click', e => {
+                        const id = e.currentTarget.id
+
+                        if (id === 'evisa-service') {
+                            document
+                                .querySelector('#evisa-service-options')
+                                .style
+                                .display = 'block'
+
+                            document
+                                .querySelector('#fast-track-service-options')
+                                .style
+                                .display = 'none'
+
+                            document.querySelector('#fast_track_entry_port_id').value = ''
+                            document.querySelector('#selected_fast_track_entry_port').textContent = 'N/A'
+                            document.querySelector('#fast_track_entry_port_id').click()
+
+                            document.querySelector('#fast_track_date').value = ''
+                            document.querySelector('#selected_fast_track_date').textContent = 'N/A'
+                            document.querySelector('#fast_track_date').click()
+
+                            document.querySelector('#time_slot_id').value = ''
+                            document.querySelector('#time_slot_description').textContent = 'N/A'
+                            document.querySelector('#time_slot_fees').textContent = '0.00'
+                            document.querySelector('#time_slot_id').click()
+
+                            document.querySelector('#total_fees').textContent = getTotalFees()
+                            document.querySelector('#total_fees_discount').textContent = getTotalFees()
+                            document.querySelector('#voucher-button').click()
+                        } else if (id === 'fast-track-service') {
+                            document
+                                .querySelector('#fast-track-service-options')
+                                .style
+                                .display = 'block'
+
+                            document
+                                .querySelector('#evisa-service-options')
+                                .style
+                                .display = 'none'
+
+                            document.querySelector('#entry_port_id').value = ''
+                            document.querySelector('#selected_entry_port').textContent = 'N/A'
+                            document.querySelector('#entry_port_id').click()
+
+                            document.querySelector('#arrival_date').value = ''
+                            document.querySelector('#selected_arrival_date').textContent = 'N/A'
+                            document.querySelector('#arrival_date').click()
+
+                            document.querySelector('#departure_date').value = ''
+                            document.querySelector('#selected_departure_date').textContent = 'N/A'
+                            document.querySelector('#departure_date').click()
+
+                            document.querySelector('#visa_type_id').value = ''
+                            document.querySelector('#visa_type_description').textContent = 'N/A'
+                            document.querySelector('#visa_type_fees').textContent = '0.00'
+                            document.querySelector('#visa_type_id').click()
+
+                            document.querySelector('#purpose_id').value = ''
+                            document.querySelector('#purpose_description').textContent = 'N/A'
+                            document.querySelector('#purpose_fees').textContent = '0.00'
+                            document.querySelector('#purpose_id').click()
+
+                            document.querySelector('#processing_time_id').value = ''
+                            document.querySelector('#processing_time_description').textContent = 'N/A'
+                            document.querySelector('#processing_time_fees').textContent = '0.00'
+                            document.querySelector('#processing_time_id').click()
+
+                            document.querySelector('#flight_ticket_image').value = null
+                            document.querySelector('#flight_ticket_image_preview').innerHTML = ''
+
+                            document.querySelector('#total_fees').textContent = getTotalFees()
+                            document.querySelector('#total_fees_discount').textContent = getTotalFees()
+                            document.querySelector('#voucher-button').click()
+                        } else {
+                            document
+                                .querySelector('#fast-track-service-options')
+                                .style
+                                .display = 'block'
+
+                            document
+                                .querySelector('#evisa-service-options')
+                                .style
+                                .display = 'block'
+                        }
+                    })
                 })
         })
     </script>

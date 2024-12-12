@@ -15,11 +15,11 @@ class PurposeSeeder extends Seeder
         $data = [
             [
                 'description' => 'Tourism',
-                'fees' => 5.00
+                'fees' => 5.00,
             ],
             [
                 'description' => 'Business',
-                'fees' => 60.00
+                'fees' => 60.00,
             ],
         ];
 

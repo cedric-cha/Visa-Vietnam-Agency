@@ -99,7 +99,7 @@ class CountrySeeder extends Seeder
             'Solomon Islands',
             'Vanuatu',
         ];
-        
+
         foreach ($data as $datum) {
             Country::factory()->create(['name' => $datum]);
         }

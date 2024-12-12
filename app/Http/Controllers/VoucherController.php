@@ -18,7 +18,7 @@ class VoucherController extends Controller
             ->first();
 
         return $voucher
-            ? $this->successResponse($voucher->discount)
+            ? $this->successResponse("$voucher->discount")
             : $this->errorResponse('Invalid voucher code.', 400);
     }
 }

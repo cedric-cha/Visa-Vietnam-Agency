@@ -11,6 +11,11 @@ class EntryPort extends Model
 
     protected $fillable = [
         'type',
-        'name'
+        'name',
+        'is_fast_track',
+    ];
+
+    protected $casts = [
+        'is_fast_track' => 'boolean',
     ];
 }

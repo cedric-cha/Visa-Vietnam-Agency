@@ -16,9 +16,10 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
      * Create a new notification instance.
      */
     public function __construct(
-        private $order,
-        private string $url,
-    ) {}
+        public $order,
+        public string $url,
+    ) {
+    }
 
     /**
      * Get the notification's delivery channels.
@@ -40,18 +41,76 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
             ->greeting('Xin Chào')
             ->cc('contact@evisa-vietnam-online.com')
             ->line('Your order has been placed successfully.')
-            ->line('Applicant : ' . $this->order->applicant->full_name)
-            ->line('Purpose : ' . $this->order->purpose->description)
-            ->line('Visa Type : ' . $this->order->visaType->description)
-            ->line('Entry Port : ' . $this->order->entryPort->name . ' (' . $this->order->entryPort->type . ')')
-            ->line('Processing Time : ' . $this->order->processingTime->description)
-            ->line('Arrival Date : ' . Carbon::parse($this->order->arrival_date)->format('M d Y'))
-            ->line('Departure Date : ' . Carbon::parse($this->order->departure_date)->format('M d Y'))
-            ->line('Total Fees : $' . number_format($this->order->total_fees_with_discount ?? $this->order->total_fees, 2))
-            ->line('-----')
-            ->line('Reference : ' . $this->order->reference)
-            ->line('Password : ' . $this->order->applicant->password)
+            ->line('Applicant : '.$this->order->applicant->full_name)
+            ->line('Purpose : '.$this->order->purpose->description ?? 'N/A')
+            ->line('Visa Type : '.$this->order->visaType->description ?? 'N/A')
+            ->line('Entry Port : '.$this->getEntryPort())
+            ->line('Processing Time : '.$this->order->processingTime->description ?? 'N/A')
+            ->line('Arrival Date : '.$this->getArrivalDate())
+            ->line('Departure Date : '.$this->getDepartureDate())
+            ->line('Fast track entry port : '.$this->getFastTrackEntryPort())
+            ->line('Fast track date : '.$this->getFastTrackDate())
+            ->line('Fast track time slot : '.$this->getTimeSlot())
+            ->line('----------')
+            ->line('Total Fees : $'.number_format($this->order->total_fees_with_discount ?? $this->order->total_fees, 2))
+            ->line('----------')
+            ->line('Reference : '.$this->order->reference)
+            ->line('Password : '.$this->order->applicant->password)
             ->action('Check my order status', $this->url);
+    }
+
+    protected function getEntryPort(): string
+    {
+        if (is_null($this->order->entryPort)) {
+            return 'N/A';
+        }
+
+        return '('.$this->order->entryPort->type.') '.$this->order->entryPort->name;
+    }
+
+    protected function getFastTrackEntryPort(): string
+    {
+        if (is_null($this->order->fastTrackEntryPort)) {
+            return 'N/A';
+        }
+
+        return $this->order->fastTrackEntryPort->name.' ('.$this->order->fastTrackEntryPort->type.')';
+    }
+
+    protected function getArrivalDate(): string
+    {
+        if (is_null($this->order->arrival_date)) {
+            return 'N/A';
+        }
+
+        return Carbon::parse($this->order->arrival_date)->format('d M Y');
+    }
+
+    protected function getFastTrackDate(): string
+    {
+        if (is_null($this->order->fast_track_date)) {
+            return 'N/A';
+        }
+
+        return Carbon::parse($this->order->fast_track_date)->format('d M Y');
+    }
+
+    protected function getDepartureDate(): string
+    {
+        if (is_null($this->order->departure_date)) {
+            return 'N/A';
+        }
+
+        return Carbon::parse($this->order->departure_date)->format('d M Y');
+    }
+
+    protected function getTimeSlot(): string
+    {
+        if (is_null($this->order->timeSlot)) {
+            return 'N/A';
+        }
+
+        return $this->order->timeSlot->name.'('.$this->order->timeSlot->start_time.' to '.$this->order->timeSlot->end_time.')';
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Enums\OrderServiceType;
 use App\Enums\OrderStatus;
 use App\Filament\Resources\OrderResource;
 use App\Models\Order;
@@ -11,8 +12,10 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class LatestOrders extends BaseWidget
 {
-    protected static ?string $heading = 'Latest Pending Orders';
-    protected int | string | array $columnSpan = 'full';
+    protected static ?string $heading = 'Latest Processed Orders';
+
+    protected int|string|array $columnSpan = 'full';
+
     protected static ?int $sort = 4;
 
     public function table(Table $table): Table
@@ -20,33 +23,35 @@ class LatestOrders extends BaseWidget
         return $table
             ->query(
                 Order::query()
-                    ->where('status', OrderStatus::PENDING)
+                    ->where('status', OrderStatus::PROCESSED->value)
                     ->latest()
                     ->limit(5)
             )
             ->paginated(false)
             ->columns([
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime('M d Y')
+                    ->date('d M Y')
                     ->icon('heroicon-m-calendar'),
 
                 Tables\Columns\TextColumn::make('reference'),
 
+                Tables\Columns\TextColumn::make('service')
+                    ->state(function (Order $record) {
+                        return match ($record->service) {
+                            OrderServiceType::EVISA->value => 'E-Visa',
+                            OrderServiceType::FAST_TRACK->value => 'Fast Track',
+                            OrderServiceType::EVISA_FAST_TRACK->value => 'E-Visa + Fast Track',
+                        };
+                    })
+                    ->color(fn (string $state): string => match ($state) {
+                        'E-Visa' => 'primary',
+                        'Fast Track' => 'info',
+                        'E-Visa + Fast Track' => 'warning',
+                    })
+                    ->badge()
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('applicant.full_name'),
-
-                Tables\Columns\TextColumn::make('processingTime.description')
-                    ->icon('heroicon-m-clock'),
-
-                Tables\Columns\TextColumn::make('purpose.description'),
-
-                Tables\Columns\TextColumn::make('visaType.description'),
-
-                Tables\Columns\TextColumn::make('entry_port_id')
-                    ->state(fn (Order $record) => '(' . $record->entryPort->type . ') ' . $record->entryPort->name),
-
-                Tables\Columns\TextColumn::make('arrival_date')
-                    ->icon('heroicon-m-calendar')
-                    ->dateTime('M d Y'),
 
                 Tables\Columns\TextColumn::make('total_fees')->money('USD'),
             ])->actions([

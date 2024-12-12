@@ -8,8 +8,11 @@ use Filament\Widgets\ChartWidget;
 class ApplicantsChart extends ChartWidget
 {
     protected static ?string $heading = 'Total Applicants Per Month';
+
     protected static bool $isLazy = false;
+
     protected static ?int $sort = 2;
+
     protected static ?string $maxHeight = '250px';
 
     protected static ?array $options = [

@@ -23,12 +23,14 @@ class ListUsers extends ListRecords
             Actions\CreateAction::make()
                 ->before(function ($data) use ($password) {
                     $data['password'] = bcrypt($password);
+
                     return $data;
                 })
                 ->after(function (User $record) use ($password) {
                     try {
                         $record->notify(new AccountCreatedNotification(url('/admin/login'), $password));
-                    } catch (Exception $e) {}
+                    } catch (Exception $e) {
+                    }
                 }),
         ];
     }

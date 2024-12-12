@@ -20,6 +20,7 @@ class EntryPortFactory extends Factory
         return [
             'type' => fake()->randomElement(EntryPortType::values()),
             'name' => fake()->word(),
+            'is_fast_track' => 0,
         ];
     }
 }

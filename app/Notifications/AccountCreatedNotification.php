@@ -17,7 +17,8 @@ class AccountCreatedNotification extends Notification implements ShouldQueue
     public function __construct(
         public string $url,
         public string $password
-    ) {}
+    ) {
+    }
 
     /**
      * Get the notification's delivery channels.
@@ -37,7 +38,7 @@ class AccountCreatedNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject('Account created')
             ->line('Your account has been created successfully.')
-            ->line('Your password is : ' . $this->password)
+            ->line('Your password is : '.$this->password)
             ->action('Got to admin panel', $this->url);
 
     }

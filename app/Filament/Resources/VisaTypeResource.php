@@ -13,7 +13,9 @@ use Filament\Tables\Table;
 class VisaTypeResource extends Resource
 {
     protected static ?string $model = VisaType::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
     protected static ?string $navigationGroup = 'Resources';
 
     public static function form(Form $form): Form
@@ -29,7 +31,7 @@ class VisaTypeResource extends Resource
                     ->required()
                     ->integer(),
 
-                Forms\Components\Toggle::make('enabled')
+                Forms\Components\Toggle::make('enabled'),
             ]);
     }
 
@@ -50,12 +52,12 @@ class VisaTypeResource extends Resource
                     ->label('Enabled ?'),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime('M d Y')
+                    ->date('d M Y')
                     ->icon('heroicon-m-calendar')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime('M d Y')
+                    ->date('d M Y')
                     ->icon('heroicon-m-calendar')
                     ->sortable(),
             ])

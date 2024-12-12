@@ -14,7 +14,9 @@ use Filament\Tables\Table;
 class EntryPortResource extends Resource
 {
     protected static ?string $model = EntryPort::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
     protected static ?string $navigationGroup = 'Resources';
 
     public static function form(Form $form): Form
@@ -22,16 +24,18 @@ class EntryPortResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('type')
-                ->options([
-                    EntryPortType::SEA_PORT->value => 'Seaport',
-                    EntryPortType::LAND_PORT->value => 'Land port',
-                    EntryPortType::AIR_PORT->value => 'Airport',
-                ])
-                ->required(),
+                    ->options([
+                        EntryPortType::SEA_PORT->value => 'Seaport',
+                        EntryPortType::LAND_PORT->value => 'Land port',
+                        EntryPortType::AIR_PORT->value => 'Airport',
+                    ])
+                    ->required(),
 
                 Forms\Components\TextInput::make('name')
                     ->maxLength(255)
-                    ->required()
+                    ->required(),
+
+                Forms\Components\Toggle::make('is_fast_track')->default(false),
             ]);
     }
 
@@ -43,13 +47,16 @@ class EntryPortResource extends Resource
                     ->searchable()
                     ->sortable(),
 
+                Tables\Columns\ToggleColumn::make('is_fast_track')
+                    ->label('Is fast track ?'),
+
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime('M d Y')
+                    ->date('d M Y')
                     ->icon('heroicon-m-calendar')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime('M d Y')
+                    ->date('d M Y')
                     ->icon('heroicon-m-calendar')
                     ->sortable(),
             ])

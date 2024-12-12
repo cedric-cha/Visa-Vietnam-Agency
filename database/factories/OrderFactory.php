@@ -2,12 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\OrderServiceType;
 use App\Enums\OrderStatus;
-use App\Models\EntryPort;
-use App\Models\ProcessingTime;
-use App\Models\Purpose;
-use App\Models\VisaType;
-use App\Models\Voucher;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,18 +19,22 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'processing_time_id' => ProcessingTime::factory(),
-            'purpose_id' => Purpose::factory(),
-            'visa_type_id' => VisaType::factory(),
-            'entry_port_id' => EntryPort::factory(),
-            'voucher_id' => Voucher::factory(),
+            'processing_time_id' => null,
+            'purpose_id' => null,
+            'visa_type_id' => null,
+            'entry_port_id' => null,
+            'voucher_id' => null,
             'total_fees' => null,
             'total_fees_with_discount' => null,
             'reference' => null,
-            'arrival_date' => fake()->dateTimeBetween()->format('Y-m-d'),
-            'departure_date' => fake()->dateTimeBetween()->format('Y-m-d'),
+            'arrival_date' => null,
+            'departure_date' => null,
             'status' => OrderStatus::PENDING->value,
-            'visa_pdf' =>  null
+            'visa_pdf' => null,
+            'time_slot_id' => null,
+            'fast_track_entry_port_id' => null,
+            'fast_track_date' => null,
+            'service' => OrderServiceType::EVISA->value,
         ];
     }
 }

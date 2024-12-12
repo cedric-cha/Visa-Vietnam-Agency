@@ -2,7 +2,6 @@
 
 namespace App\Notifications;
 
-use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -16,9 +15,9 @@ class OrderProcessedNotification extends Notification implements ShouldQueue
      * Create a new notification instance.
      */
     public function __construct(
-        private Order $order,
-        private string $url,
-    ) {}
+        public $order,
+    ) {
+    }
 
     /**
      * Get the notification's delivery channels.
@@ -38,8 +37,8 @@ class OrderProcessedNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject('Order processed')
             ->cc('contact@evisa-vietnam-online.com')
-            ->line('Your order ' . $this->order->reference . ' has been processed. Please check your email for the attachment containing your e-visa to download.')
-            ->attach(storage_path('app/public') . '/' . $this->order->visa_pdf);
+            ->line('Your order '.$this->order->reference.' has been processed. Please check your email for the attachment containing your e-visa to download.')
+            ->attach(storage_path('app/public').'/'.$this->order->visa_pdf);
     }
 
     /**

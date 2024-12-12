@@ -27,7 +27,7 @@ class EntryPortSeeder extends Seeder
                 'Tho Xuan airport - Thanh Hoa province (THD)',
                 'Dong Hoi airport - Quang Binh province (VDH)',
                 'Phu Cat airport - Binh Dinh province (UIH)',
-                'Lien Khuong airport - Da Lat city (DLI)'
+                'Lien Khuong airport - Da Lat city (DLI)',
             ],
 
             EntryPortType::LAND_PORT->value => [
@@ -46,7 +46,7 @@ class EntryPortSeeder extends Seeder
                 'Xa Mat landport',
                 'Tinh Bien landport',
                 'Vinh Xuong landport',
-                'Ha Tien landport'
+                'Ha Tien landport',
             ],
 
             EntryPortType::SEA_PORT->value => [
@@ -62,7 +62,7 @@ class EntryPortSeeder extends Seeder
                 'Dung Quat port (VNDQT)',
                 'Vung Tau port (VNVUT)',
                 'Ho Chi Minh port (VNSGN)',
-                'Duong Dong port (VNPQC)'
+                'Duong Dong port (VNPQC)',
             ],
         ];
 
@@ -70,7 +70,7 @@ class EntryPortSeeder extends Seeder
             foreach ($names as $name) {
                 EntryPort::factory()->create([
                     'type' => $type,
-                    'name' => $name
+                    'name' => $name,
                 ]);
             }
         }

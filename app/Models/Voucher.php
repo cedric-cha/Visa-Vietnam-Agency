@@ -13,11 +13,11 @@ class Voucher extends Model
     protected $fillable = [
         'code',
         'valid',
-        'discount'
+        'discount',
     ];
 
     protected $casts = [
-        'valid' => 'boolean'
+        'valid' => 'boolean',
     ];
 
     public function orders(): HasMany

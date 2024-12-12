@@ -13,7 +13,9 @@ use Filament\Tables\Table;
 class CountryResource extends Resource
 {
     protected static ?string $model = Country::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
     protected static ?string $navigationGroup = 'Resources';
 
     public static function form(Form $form): Form
@@ -36,12 +38,12 @@ class CountryResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime('M d Y')
+                    ->date('d M Y')
                     ->icon('heroicon-m-calendar')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime('M d Y')
+                    ->date('d M Y')
                     ->icon('heroicon-m-calendar')
                     ->sortable(),
             ])

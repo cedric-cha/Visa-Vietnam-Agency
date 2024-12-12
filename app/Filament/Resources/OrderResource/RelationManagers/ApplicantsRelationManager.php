@@ -11,7 +11,6 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
@@ -55,19 +54,19 @@ class ApplicantsRelationManager extends RelationManager
                     ->email()
                     ->required()
                     ->maxLength(255),
-                    
+
                 Forms\Components\TextInput::make('address')
                     ->required()
                     ->maxLength(255),
-                
+
                 Forms\Components\TextInput::make('phone_number')
                     ->required()
                     ->maxLength(255),
-            
+
                 Forms\Components\TextInput::make('passport_number')
                     ->required()
                     ->maxLength(255),
-            
+
                 Forms\Components\DatePicker::make('passport_expiration_date')->required(),
 
                 Forms\Components\FileUpload::make('photo')
@@ -77,6 +76,12 @@ class ApplicantsRelationManager extends RelationManager
                     ->required(),
 
                 Forms\Components\FileUpload::make('passport_image')
+                    ->disk('public')
+                    ->image()
+                    ->imageEditor()
+                    ->required(),
+
+                Forms\Components\FileUpload::make('flight_ticket_image')
                     ->disk('public')
                     ->image()
                     ->imageEditor()
@@ -102,20 +107,27 @@ class ApplicantsRelationManager extends RelationManager
                     ->width(250)
                     ->height(100),
 
+                Tables\Columns\ImageColumn::make('flight_ticket_image')
+                    ->toggleable()
+                    ->width(250)
+                    ->height(100),
+
                 Tables\Columns\TextColumn::make('country')
-                    ->state(function (Applicant $record): string|null {
+                    ->state(function (Applicant $record): ?string {
                         return DB::table('countries')
-                            ->find($record->country, 'name')
+                            ->find($record->country, ['name'])
                             ?->name;
                     })
                     ->icon('heroicon-m-map-pin')
                     ->toggleable()
+                    ->toggledHiddenByDefault()
                     ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('date_of_birth')
                     ->icon('heroicon-m-cake')
                     ->toggleable()
+                    ->toggledHiddenByDefault()
                     ->toggledHiddenByDefault(),
 
                 Tables\Columns\TextColumn::make('phone_number')
@@ -140,23 +152,25 @@ class ApplicantsRelationManager extends RelationManager
 
                 Tables\Columns\TextColumn::make('passport_number')
                     ->toggleable()
+                    ->toggledHiddenByDefault()
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('passport_expiration_date')
-                    ->dateTime('M d Y')
+                    ->date('d M Y')
                     ->icon('heroicon-m-calendar')
                     ->toggleable()
+                    ->toggledHiddenByDefault()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime('M d Y')
+                    ->date('d M Y')
                     ->icon('heroicon-m-calendar')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime('M d Y')
+                    ->date('d M Y')
                     ->icon('heroicon-m-calendar')
                     ->toggleable()
                     ->toggledHiddenByDefault()
@@ -170,13 +184,15 @@ class ApplicantsRelationManager extends RelationManager
                     ->after(function (Applicant $record) {
                         try {
                             Notification::route('mail', $record->email)->notify(
-                                new OrderPlacedNotification($record->order->reference, $record->password, url('/check-visa-status'))
+                                new OrderPlacedNotification($record->order, url('/check-visa-status'))
                             );
-                        } catch (Exception $e) {}
+                        } catch (Exception $e) {
+                            report($e);
+                        }
                     }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([]);
     }

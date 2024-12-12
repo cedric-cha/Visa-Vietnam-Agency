@@ -6,9 +6,9 @@ use App\Events\OrderTransactionSucceeded;
 use App\Models\User;
 use App\Notifications\OrderPlacedAdminNotification;
 use App\Notifications\OrderPlacedNotification;
+use App\Notifications\ProcessOrderRequestNotification;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class SendOrderTransactionSucceededNotification implements ShouldQueue
@@ -16,7 +16,9 @@ class SendOrderTransactionSucceededNotification implements ShouldQueue
     /**
      * Create the event listener.
      */
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * Handle the event.
@@ -26,19 +28,29 @@ class SendOrderTransactionSucceededNotification implements ShouldQueue
         try {
             Notification::route('mail', $event->order->applicant->email)->notify(
                 new OrderPlacedNotification(
-                    $event->order->reference,
-                    $event->order->applicant->password,
-                    url('/check-visa-status?reference=' . $event->order->reference . '&password=' . $event->order->applicant->password)
+                    $event->order, url('/check-visa-status?reference='.$event->order->reference.'&password='.$event->order->applicant->password)
                 )
             );
         } catch (Exception $e) {
-            Log::error($e->getMessage());
+            report($e);
         }
 
         try {
-            Notification::send(User::all(), new OrderPlacedAdminNotification($event->order, url('/admin/login'))) ;
+            Notification::send(
+                User::all(),
+                new OrderPlacedAdminNotification($event->order, url('/admin/login'))
+            );
+
         } catch (Exception $e) {
-            Log::error($e->getMessage());
+            report($e);
+        }
+
+        try {
+            Notification::route('mail', config('mail.provider.address'))->notify(
+                new ProcessOrderRequestNotification($event->order)
+            );
+        } catch (Exception $e) {
+            report($e);
         }
     }
 }

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class VisaTypeFactory extends Factory
 {
     /**
-      * Define the model's default state.
+     * Define the model's default state.
      *
      * @return array<string, mixed>
      */
@@ -19,8 +19,7 @@ class VisaTypeFactory extends Factory
         return [
             'description' => fake()->sentence(5),
             'fees' => 0.00,
-		    'enabled' => true
+            'enabled' => true,
         ];
     }
 }
- 

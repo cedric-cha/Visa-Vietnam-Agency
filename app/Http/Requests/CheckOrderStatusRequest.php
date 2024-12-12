@@ -23,7 +23,7 @@ class CheckOrderStatusRequest extends FormRequest
     {
         return [
             'reference' => 'required|string|exists:orders,reference',
-            'password' => 'required|string|exists:applicants,password'
+            'password' => 'required|string|exists:applicants,password',
         ];
     }
 }

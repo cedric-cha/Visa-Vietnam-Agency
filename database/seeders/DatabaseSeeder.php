@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         User::factory()->create([
             'email' => 'admin@mail.com',
-            'password' => 'password'
+            'password' => 'password',
         ]);
 
         $this->call([
@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             EntryPortSeeder::class,
             ProcessingTimeSeeder::class,
             VisaTypeSeeder::class,
-            PurposeSeeder::class
+            PurposeSeeder::class,
+            OrderSeeder::class,
         ]);
     }
 }

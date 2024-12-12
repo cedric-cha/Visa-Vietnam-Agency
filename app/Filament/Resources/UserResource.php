@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function form(Form $form): Form
@@ -40,12 +41,12 @@ class UserResource extends Resource
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime('M d Y')
+                    ->date('d M Y')
                     ->icon('heroicon-m-calendar')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime('M d Y')
+                    ->date('d M Y')
                     ->icon('heroicon-m-calendar')
                     ->sortable(),
             ])

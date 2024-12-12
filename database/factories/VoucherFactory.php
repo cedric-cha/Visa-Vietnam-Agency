@@ -20,7 +20,7 @@ class VoucherFactory extends Factory
         return [
             'code' => Str::password(length: 8, symbols: false),
             'valid' => true,
-            'discount' => 10
+            'discount' => 10,
         ];
     }
 }

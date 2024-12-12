@@ -15,19 +15,19 @@ class VisaTypeSeeder extends Seeder
         $data = [
             [
                 'description' => '30 days single',
-                'fees' => 12.00
+                'fees' => 12.00,
             ],
             [
                 'description' => '30 days multiple',
-                'fees' => 7.00
+                'fees' => 7.00,
             ],
             [
                 'description' => '90 days single',
-                'fees' => 10.00
+                'fees' => 10.00,
             ],
             [
                 'description' => '90 days multiple',
-                'fees' => 4.00
+                'fees' => 4.00,
             ],
         ];
 

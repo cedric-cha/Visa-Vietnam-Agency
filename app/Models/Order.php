@@ -18,7 +18,9 @@ class Order extends Model
         'visaType',
         'entryPort',
         'applicant',
-        'voucher'
+        'voucher',
+        'timeSlot',
+        'fastTrackEntryPort',
     ];
 
     protected $fillable = [
@@ -34,6 +36,10 @@ class Order extends Model
         'reference',
         'status',
         'visa_pdf',
+        'time_slot_id',
+        'fast_track_entry_port_id',
+        'fast_track_date',
+        'service',
     ];
 
     public function applicant(): HasOne
@@ -64,5 +70,15 @@ class Order extends Model
     public function voucher(): BelongsTo
     {
         return $this->belongsTo(Voucher::class);
+    }
+
+    public function fastTrackEntryPort(): BelongsTo
+    {
+        return $this->belongsTo(EntryPort::class, 'fast_track_entry_port_id');
+    }
+
+    public function timeSlot(): BelongsTo
+    {
+        return $this->belongsTo(TimeSlot::class);
     }
 }

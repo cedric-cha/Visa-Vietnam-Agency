@@ -13,6 +13,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class OrdersStatsOverview extends BaseWidget
 {
     protected static bool $isLazy = false;
+
     protected static ?int $sort = 0;
 
     protected function getStats(): array
@@ -41,16 +42,16 @@ class OrdersStatsOverview extends BaseWidget
 
         return [
             Stat::make('Total Processed Orders (This Month)', $ordersCount['count'])
-                ->description($ordersCount['variation'] ? ucfirst($ordersCount['variation']['type']) . ' of ' . $ordersCount['variation']['value'] : '')
+                ->description($ordersCount['variation'] ? ucfirst($ordersCount['variation']['type']).' of '.$ordersCount['variation']['value'] : '')
                 ->descriptionIcon($ordersCount['variation'] && $ordersCount['variation']['type'] === 'increase' ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($ordersCount['variation'] && $ordersCount['variation']['type'] === 'increase' ? 'primary' : 'danger'),
-            Stat::make('Total Processed Orders Amount (This Month)', '$' . $ordersPrice['count'])
-                ->description($ordersPrice['variation'] ? ucfirst($ordersPrice['variation']['type']) . ' of $' . $ordersPrice['variation']['value'] : '')
+            Stat::make('Total Processed Orders Amount (This Month)', '$'.$ordersPrice['count'])
+                ->description($ordersPrice['variation'] ? ucfirst($ordersPrice['variation']['type']).' of $'.$ordersPrice['variation']['value'] : '')
                 ->descriptionIcon($ordersPrice['variation'] && $ordersPrice['variation']['type'] === 'increase' ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($ordersPrice['variation'] && $ordersPrice['variation']['type'] === 'increase' ? 'primary' : 'danger')
                 ->icon('heroicon-o-check-circle'),
             Stat::make('Total Applicants (This Month)', $applicants['count'])
-                ->description($applicants['variation'] ? ucfirst($applicants['variation']['type']) . ' of ' . $applicants['variation']['value'] : '')
+                ->description($applicants['variation'] ? ucfirst($applicants['variation']['type']).' of '.$applicants['variation']['value'] : '')
                 ->descriptionIcon($applicants['variation'] && $applicants['variation']['type'] === 'increase' ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($applicants['variation'] && $applicants['variation']['type'] === 'increase' ? 'primary' : 'danger')
                 ->icon('heroicon-o-user-group'),

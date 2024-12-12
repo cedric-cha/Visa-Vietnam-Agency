@@ -6,7 +6,6 @@ use App\Events\OrderCancelled;
 use App\Notifications\OrderCancelledNotification;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class SendOrderCancelledNotification implements ShouldQueue
@@ -14,7 +13,9 @@ class SendOrderCancelledNotification implements ShouldQueue
     /**
      * Create the event listener.
      */
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * Handle the event.
@@ -25,11 +26,11 @@ class SendOrderCancelledNotification implements ShouldQueue
             Notification::route('mail', $event->order->applicant->email)->notify(
                 new OrderCancelledNotification(
                     $event->order->reference,
-                    url('/check-visa-status?reference=' . $event->order->reference . '&password=' . $event->order->applicant->password)
+                    url('/check-visa-status?reference='.$event->order->reference.'&password='.$event->order->applicant->password)
                 )
             );
         } catch (Exception $e) {
-            Log::error($e->getMessage());
+            report($e);
         }
     }
 }

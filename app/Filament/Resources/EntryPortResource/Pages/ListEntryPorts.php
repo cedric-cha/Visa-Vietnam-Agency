@@ -6,8 +6,8 @@ use App\Enums\EntryPortType;
 use App\Filament\Resources\EntryPortResource;
 use App\Models\EntryPort;
 use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
 use Filament\Resources\Components\Tab;
+use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
 
 class ListEntryPorts extends ListRecords

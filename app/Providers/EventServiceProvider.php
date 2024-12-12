@@ -31,16 +31,16 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         OrderProcessed::class => [
-            SendOrderProcessedNotification::class
+            SendOrderProcessedNotification::class,
         ],
 
         OrderCancelled::class => [
-            SendOrderCancelledNotification::class
+            SendOrderCancelledNotification::class,
         ],
 
         OrderTransactionSucceeded::class => [
-            SendOrderTransactionSucceededNotification::class
-        ]
+            SendOrderTransactionSucceededNotification::class,
+        ],
     ];
 
     /**

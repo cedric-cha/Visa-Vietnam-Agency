@@ -12,10 +12,10 @@ class VisaType extends Model
     protected $fillable = [
         'description',
         'fees',
-        'enabled'
+        'enabled',
     ];
 
     protected $casts = [
-        'enabled' => 'boolean'
+        'enabled' => 'boolean',
     ];
 }

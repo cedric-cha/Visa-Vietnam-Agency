@@ -6,7 +6,6 @@ use Eliseekn\LaravelMetrics\HasMetrics;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Str;
 
 class Applicant extends Model
 {
@@ -25,7 +24,8 @@ class Applicant extends Model
         'passport_expiration_date',
         'photo',
         'passport_image',
-        'password'
+        'password',
+        'flight_ticket_image',
     ];
 
     public function order(): BelongsTo

@@ -3,32 +3,54 @@
 namespace App\Http\UseCases\PaymentUseCase;
 
 use App\Enums\OrderStatus;
+use App\Events\OrderTransactionSucceeded;
 use App\Models\Order;
+use Eliseekn\LaravelApiResponse\MakeApiResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use App\Models\User;
-use App\Notifications\OrderPlacedAdminNotification;
-use App\Notifications\OrderPlacedNotification;
-use Exception;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 
 class PaymentUseCase
 {
-    
-  
-  public function __construct(
-        // sandbox
-        //private string $endPoint = 'https://sand-payment.9pay.vn',
-        //private string $secretKey = 'AhBwACK1elBGwiOspkBHyfUCAHyAAvyg2CQ',
-        //private string $keyChecksum = '7SDMRDW0PyaSt2urwztUjPGQGv78CkML',
-        //private string $merchantKey = 'FxWijU',
+    use MakeApiResponse;
 
-        // production
-        private string $endPoint = 'https://payment.9pay.vn',
-        private string $secretKey = 'WWMPSj5dmZoDIAYW4LThFyd14j3cTBnu7JP',
-        private string $keyChecksum = '27mZuSJhm8wWWkq9xBJpeng7i96cGybm',
-        private string $merchantKey = 'MCZSV5',
-    ) {
+    public function __construct()
+    {
+    }
+
+    protected function getEndPoint(): string
+    {
+        if (config('9pay.sandbox') === true) {
+            return config('9pay.endpoint_sandbox');
+        }
+
+        return config('9pay.endpoint');
+    }
+
+    protected function getSecretKey(): string
+    {
+        if (config('9pay.sandbox') === true) {
+            return config('9pay.merchant_secret_key_sandbox');
+        }
+
+        return config('9pay.merchant_secret_key');
+    }
+
+    protected function getKeyChecksum(): string
+    {
+        if (config('9pay.sandbox') === true) {
+            return config('9pay.merchant_checksum_key_sandbox');
+        }
+
+        return config('9pay.merchant_checksum_key');
+    }
+
+    protected function getMerchantKey(): string
+    {
+        if (config('9pay.sandbox') === true) {
+            return config('9pay.merchant_key_sandbox');
+        }
+
+        return config('9pay.merchant_key');
     }
 
     protected function sign($message, $key): string
@@ -44,6 +66,7 @@ class PaymentUseCase
             $padLen = 4 - $remainder;
             $input .= str_repeat('=', $padLen);
         }
+
         return base64_decode(strtr($input, '-_', '+/'));
     }
 
@@ -58,32 +81,32 @@ class PaymentUseCase
         };
     }
 
-    public function redirectToPaymentUrl(Order $order): RedirectResponse
+    public function redirectToPaymentUrl(Order $order): JsonResponse
     {
         $time = time();
 
         $data = [
-            'merchantKey' => $this->merchantKey,
+            'merchantKey' => $this->getMerchantKey(),
             'invoice_no' => $order->reference,
-             'amount' => ($order->voucher && $order->voucher->valid) ? $order->total_fees_with_discount : $order->total_fees,
+            'amount' => ($order->voucher && $order->voucher->valid) ? $order->total_fees_with_discount : $order->total_fees,
             'description' => 'e-Visa Vietnam Online Order',
             'return_url' => url('/payment-result'),
             'time' => $time,
             'lang' => 'en',
-            'currency' => 'USD'
+            'currency' => 'USD',
         ];
 
         $message = MessageBuilder::instance()
-            ->with($time, $this->endPoint . '/payments/create', 'POST')
+            ->with($time, $this->getEndPoint().'/payments/create', 'POST')
             ->withParams($data)
             ->build();
 
         $queries = [
             'baseEncode' => base64_encode(json_encode($data, JSON_UNESCAPED_UNICODE)),
-            'signature' => base64_encode($this->sign($message, $this->secretKey)),
+            'signature' => base64_encode($this->sign($message, $this->getSecretKey())),
         ];
 
-        return redirect()->away($this->endPoint .  '/portal?' . http_build_query($queries));
+        return $this->successResponse($this->getEndPoint().'/portal?'.http_build_query($queries));
     }
 
     public function getPaymentResult(string $result): RedirectResponse
@@ -95,67 +118,59 @@ class PaymentUseCase
             return redirect('/')->with('success', "Thank you for your order! We've received your request and will process it promptly. An email with your order details has been sent to you. If you have any questions, feel free to contact us.");
         }
 
-        return redirect('/')->with('warning',  'Transaction status: ' . $this->getStatus($result['status']));
+        return redirect('/')->with('warning', 'Transaction status: '.$this->getStatus($result['status']));
     }
 
-    public function readResult(string $message = null, string $sum = null): void
+    public function readPaymentResult(array $data): JsonResponse
     {
-        if (!isset($message) || !isset($sum)) {
-            Log::info("Check result failed 1");
-            return;
+        if (! isset($data['result']) || ! isset($data['checksum'])) {
+            logger('Failed to read result');
+
+            return response()->json(['success' => false]);
         }
 
-        if ($this->verifyResult($sum, $message)) {
-            $result = $this->convertArray(base64_decode($message));
+        if (! $this->verifyResult($data['checksum'], $data['result'])) {
+            logger('Failed verify result');
 
-            Log::info("Check result success",  ['rs' => $result]);
-
-            $order = Order::query()
-                ->where('reference', $result['invoice_no'])
-                ->first();
-
-            $order->update(['status' => $this->getStatus($result['status'])]);
-
-            if (($this->getStatus($result['status']) === OrderStatus::TRANSACTION_SUCCESS->value)) {
-                try {
-                    Notification::route('mail', $order->applicant->email)->notify(
-                        new OrderPlacedNotification(
-                            $order, url('/check-visa-status?reference=' . $order->reference . '&password=' . $order->applicant->password)
-                        )
-                    );
-                } catch (Exception $e) {
-                    Log::error('Error processing order: ' . $e->getMessage());
-                }
-
-                $users = User::all();
-
-                foreach ($users as $user) {
-                    try {
-                        $user->notify(new OrderPlacedAdminNotification($order, url('/admin/login')));
-                    } catch (Exception $e) {
-                        Log::error('Error processing order: ' . $e->getMessage());
-                    }
-                }
-            }
-        } else {
-            Log::info("Check result failed 2");
+            return response()->json(['success' => false]);
         }
+
+        $result = $this->convertArray(base64_decode($data['result']));
+
+        $order = Order::query()
+            ->where('reference', $result['invoice_no'])
+            ->first();
+
+        $order->update(['status' => $this->getStatus($result['status'])]);
+
+        if ($this->getStatus($result['status']) === OrderStatus::TRANSACTION_SUCCESS->value) {
+            event(new OrderTransactionSucceeded($order));
+
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false]);
     }
-    protected function verifyResult(string $signature, string $result): string
+
+    protected function verifyResult(string $signature, string $result): bool
     {
-        $hashChecksum = strtoupper(hash('sha256', $result . $this->keyChecksum));
-        return !strcmp($hashChecksum, $signature);
+        $hashChecksum = strtoupper(hash('sha256', $result.$this->getKeyChecksum()));
+
+        return ! strcmp($hashChecksum, $signature);
     }
 
     protected function convertArray($data): array
     {
-        if (!$data) {
+        if (! $data) {
             return [];
         }
-        $tmp = json_decode(json_encode($data, true), true);
-        if (!is_array($tmp)) {
+
+        $tmp = json_decode(json_encode($data), true);
+
+        if (! is_array($tmp)) {
             $tmp = json_decode($tmp, true);
         }
+
         return $tmp;
     }
 }

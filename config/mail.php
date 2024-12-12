@@ -112,6 +112,10 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    'provider' => [
+        'address' => env('MAIL_PROVIDER_ADDRESS', 'service@provider.com'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Markdown Mail Settings

@@ -8,8 +8,11 @@ use Filament\Widgets\ChartWidget;
 class OrdersChart extends ChartWidget
 {
     protected static ?string $heading = 'Processed Orders Amount Per Month (USD)';
+
     protected static bool $isLazy = false;
+
     protected static ?int $sort = 1;
+
     protected static ?string $maxHeight = '250px';
 
     protected static ?array $options = [

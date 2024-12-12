@@ -7,44 +7,51 @@ use App\Exceptions\SignatureException;
 class MessageBuilder
 {
     private $method = 'GET';
+
     private $uri;
+
     private $headers;
+
     private $date;
+
     private $params;
+
     private $body;
 
-    public function with($date, $uri, $method = 'GET', $headers = [])
+    public function with(mixed $date, string $uri, string $method = 'GET', array $headers = []): self
     {
         $this->date = $date;
         $this->uri = $uri;
         $this->method = $method;
         $this->headers = $headers;
+
         return $this;
     }
 
-    public function withBody($body)
+    public function withBody(array|string $body): self
     {
-        if (!is_string($body)) {
+        if (! is_string($body)) {
             $body = json_encode($body);
         }
+
         $this->body = $body;
 
         return $this;
     }
 
-    public function withParams(array $params = [])
+    public function withParams(array $params = []): self
     {
         $this->params = $params;
 
         return $this;
     }
 
-    public function build()
+    public function build(): string
     {
         try {
             $this->validate();
         } catch (SignatureException $e) {
-            echo $e;
+            report($e);
         }
 
         $canonicalHeaders = $this->canonicalHeaders();
@@ -65,7 +72,7 @@ class MessageBuilder
         return implode("\n", $components);
     }
 
-    public static function instance()
+    public static function instance(): self
     {
         return new MessageBuilder();
     }
@@ -75,28 +82,31 @@ class MessageBuilder
         return $this->build();
     }
 
-    protected function validate()
+    protected function validate(): void
     {
         if (empty($this->uri) || empty($this->date)) {
             throw new SignatureException('Please pass properties by with function first');
         }
     }
 
-    protected function canonicalHeaders()
+    protected function canonicalHeaders(): string
     {
-        if (!empty($this->headers)) {
+        if (! empty($this->headers)) {
             ksort($this->headers);
+
             return http_build_query($this->headers);
         }
+
+        return '';
     }
 
-    protected function canonicalParams()
+    protected function canonicalParams(): string
     {
         $str = '';
-        if (!empty($this->params)) {
+        if (! empty($this->params)) {
             ksort($this->params);
             foreach ($this->params as $key => $val) {
-                $str .= urlencode($key) . '=' . urlencode($val) . '&';
+                $str .= urlencode($key).'='.urlencode($val).'&';
             }
             $str = substr($str, 0, -1);
         }
@@ -104,10 +114,12 @@ class MessageBuilder
         return $str;
     }
 
-    protected function canonicalBody()
+    protected function canonicalBody(): string
     {
-        if (!empty($this->body)) {
+        if (! empty($this->body)) {
             return base64_encode(hash('sha256', $this->body, true));
         }
+
+        return '';
     }
 }

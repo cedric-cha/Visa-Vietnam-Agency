@@ -13,7 +13,9 @@ use Filament\Tables\Table;
 class ProcessingTimeResource extends Resource
 {
     protected static ?string $model = ProcessingTime::class;
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
     protected static ?string $navigationGroup = 'Resources';
 
     public static function form(Form $form): Form
@@ -27,7 +29,7 @@ class ProcessingTimeResource extends Resource
 
                 Forms\Components\TextInput::make('fees')
                     ->required()
-                    ->integer()
+                    ->integer(),
             ]);
     }
 
@@ -38,19 +40,19 @@ class ProcessingTimeResource extends Resource
                 Tables\Columns\TextColumn::make('description')
                     ->sortable()
                     ->searchable(),
-                    
+
                 Tables\Columns\TextColumn::make('fees')
                     ->money('USD')
                     ->sortable()
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime('M d Y')
+                    ->date('d M Y')
                     ->icon('heroicon-m-calendar')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime('M d Y')
+                    ->date('d M Y')
                     ->icon('heroicon-m-calendar')
                     ->sortable(),
             ])
