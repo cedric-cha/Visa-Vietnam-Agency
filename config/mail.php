@@ -113,7 +113,7 @@ return [
     ],
 
     'provider' => [
-        'address' => env('MAIL_PROVIDER_ADDRESS', 'service@provider.com'),
+        'address' => env('MAIL_PROVIDER_ADDRESS', 'cedric.chasseriau@gmail.com'),
     ],
 
     /*

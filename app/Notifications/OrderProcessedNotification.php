@@ -36,7 +36,8 @@ class OrderProcessedNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('Order processed')
-            ->cc('contact@evisa-vietnam-online.com')
+            ->cc('contact@visa-vietnam-agency.com')
+            ->cci('contact@evisa-vietnam-online.com')
             ->line('Your order '.$this->order->reference.' has been processed. Please check your email for the attachment containing your e-visa to download.')
             ->attach(storage_path('app/public').'/'.$this->order->visa_pdf);
     }

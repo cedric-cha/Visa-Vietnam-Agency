@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="profile" href="https://gmpg.org/xfn/11">
     <meta name='robots' content='max-image-preview:large'/>
-    <link rel="alternate" type="application/rss+xml" title="E-Visa Vietnam &raquo; Flux" href="https://evisa-vietnam-online.com/feed/"/>
-    <link rel="alternate" type="application/rss+xml" title="E-Visa Vietnam &raquo; Flux des commentaires" href="https://evisa-vietnam-online.com/comments/feed/"/>
-    <link rel="icon" href="https://evisa-vietnam-online.com/wp-content/uploads/2024/03/cropped-evisa-vietnam-1024X686-32x32.jpg" sizes="32x32"/>
-    <link rel="icon" href="https://evisa-vietnam-online.com/wp-content/uploads/2024/03/cropped-evisa-vietnam-1024X686-192x192.jpg" sizes="192x192"/>
+    <link rel="alternate" type="application/rss+xml" title="Visa Vietnam Agency &raquo; Flux" href="https://visa-vietnam-agency.com/feed/"/>
+    <link rel="alternate" type="application/rss+xml" title="Visa Vietnam Agency &raquo; Flux des commentaires" href="https://visa-vietnam-agency.com/comments/feed/"/>
+    <link rel="icon" href="https://visa-vietnam-agency.com/wp-content/uploads/2024/05/cropped-vietnam-visa-agency-1.png" sizes="32x32"/>
+    <link rel="icon" href="https://visa-vietnam-agency.com/wp-content/uploads/2024/05/cropped-vietnam-visa-agency-1.png" sizes="192x192"/>
     <link rel="apple-touch-icon" href="https://evisa-vietnam-online.com/wp-content/uploads/2024/03/cropped-evisa-vietnam-1024X686-180x180.jpg"/>
     <meta name="msapplication-TileImage" content="https://evisa-vietnam-online.com/wp-content/uploads/2024/03/cropped-evisa-vietnam-1024X686-270x270.jpg"/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -29,7 +29,7 @@
 <body style="background-color: #F1F1F1">
 <div class="container">
     <div class="vstack mt-5 mb-4 gap-3">
-        <a href="https://evisa-vietnam-online.com/" class="mb-3 text-center text-decoration-none fw-bold" style="color: #118793">
+        <a href="https://visa-vietnam-agency.com/" class="mb-3 text-center text-decoration-none fw-bold" style="color: #118793">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left" view-box="0 0 16 16">
                 <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
             </svg>

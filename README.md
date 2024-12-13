@@ -2,7 +2,7 @@
 
 ## Installation
 ```bash
-git clone https://github.com/eliseekn/backend.evisa-vietnam-online.com.git
+git https://github.com/cedric-cha/Visa-Vietnam-Agency.git
 cd backend.evisa-vietnam-online.com
 ```
 

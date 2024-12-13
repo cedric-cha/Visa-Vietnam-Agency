@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::hex('#118793'),
             ])
             ->brandLogo(asset('/img/logo.jpg'))
-            ->favicon('https://evisa-vietnam-online.com/wp-content/uploads/2024/03/cropped-evisa-vietnam-1024X686-32x32.jpg')
+            ->favicon('https://visa-vietnam-agency.com/wp-content/uploads/2024/05/cropped-vietnam-visa-agency-1.png')
             ->brandLogoHeight('3.5rem')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
