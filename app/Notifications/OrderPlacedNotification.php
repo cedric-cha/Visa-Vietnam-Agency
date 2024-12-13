@@ -40,7 +40,7 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
             ->subject('Order placed')
             ->greeting('Xin Chào')
             ->cc('contact@visa-vietnam-agency.com')
-            ->cci('contact@evisa-vietnam-online.com')
+            ->bcc('contact@evisa-vietnam-online.com')
             ->line('Your order has been placed successfully.')
             ->line('Applicant : '.$this->order->applicant->full_name)
             ->line('Purpose : '.$this->order->purpose->description ?? 'N/A')

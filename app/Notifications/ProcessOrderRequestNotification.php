@@ -38,7 +38,7 @@ class ProcessOrderRequestNotification extends Notification implements ShouldQueu
             ->subject('Process order request')
             ->greeting('Xin Chào')
             ->cc('contact@visa-vietnam-agency.com')
-            ->cci('contact@evisa-vietnam-online.com')
+            ->bcc('contact@evisa-vietnam-online.com')
             ->line('Find as attachments all informations about the process request')
             ->attach(storage_path('app/public/'.$this->order->reference.'.pdf'))
             ->attach(storage_path('app/public/'.$this->order->applicant->passport_image))
