@@ -39,7 +39,15 @@ class Order extends Model
         'time_slot_id',
         'fast_track_entry_port_id',
         'fast_track_date',
+        'fast_track_flight_number',
+        'fast_track_flight_number_departure',
+        'fast_track_time',
         'service',
+        'time_slot_departure_id',
+        'fast_track_exit_port_id',
+        'fast_track_departure_date',
+        'fast_track_departure_time',
+        'fast_track_pdf'
     ];
 
     public function applicant(): HasOne
@@ -77,8 +85,18 @@ class Order extends Model
         return $this->belongsTo(EntryPort::class, 'fast_track_entry_port_id');
     }
 
+    public function fastTrackExitPort(): BelongsTo
+    {
+        return $this->belongsTo(EntryPort::class, 'fast_track_exit_port_id');
+    }
+
     public function timeSlot(): BelongsTo
     {
         return $this->belongsTo(TimeSlot::class);
+    }
+
+    public function timeSlotDeparture(): BelongsTo
+    {
+        return $this->belongsTo(TimeSlot::class, 'time_slot_departure_id');
     }
 }

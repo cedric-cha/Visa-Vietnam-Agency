@@ -26,6 +26,7 @@ class Applicant extends Model
         'passport_image',
         'password',
         'flight_ticket_image',
+        'address_vietnam',
     ];
 
     public function order(): BelongsTo

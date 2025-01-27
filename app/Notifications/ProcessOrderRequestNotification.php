@@ -16,8 +16,7 @@ class ProcessOrderRequestNotification extends Notification implements ShouldQueu
      */
     public function __construct(
         public $order,
-    ) {
-    }
+    ) {}
 
     /**
      * Get the notification's delivery channels.
@@ -34,16 +33,24 @@ class ProcessOrderRequestNotification extends Notification implements ShouldQueu
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
+        $message = (new MailMessage)
             ->subject('Process order request')
             ->greeting('Xin Chào')
-            ->cc('contact@visa-vietnam-agency.com')
-            ->bcc('contact@evisa-vietnam-online.com')
-            ->line('Find as attachments all informations about the process request')
-            ->attach(storage_path('app/public/'.$this->order->reference.'.pdf'))
+            ->cc('contact@evisa-vietnam-online.com')
+            ->line('Find as attachments all informations about the process request.')
             ->attach(storage_path('app/public/'.$this->order->applicant->passport_image))
             ->attach(storage_path('app/public/'.$this->order->applicant->photo))
             ->attach(storage_path('app/public/'.$this->order->applicant->flight_ticket_image));
+
+        if (file_exists(storage_path('app/public/'.$this->order->reference.'_E_VISA_SERVICE.pdf'))) {
+            $message->attach(storage_path('app/public/'.$this->order->reference.'_E_VISA_SERVICE.pdf'));
+        }
+
+        if (file_exists(storage_path('app/public/'.$this->order->reference.'_FAST_TRACK_SERVICE.pdf'))) {
+            $message->attach(storage_path('app/public/'.$this->order->reference.'_FAST_TRACK_SERVICE.pdf'));
+        }
+
+        return $message;
     }
 
     /**

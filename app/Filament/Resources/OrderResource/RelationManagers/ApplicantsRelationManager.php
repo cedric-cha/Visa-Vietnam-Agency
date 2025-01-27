@@ -31,14 +31,7 @@ class ApplicantsRelationManager extends RelationManager
                     ->maxLength(255)
                     ->visibleOn('edit'),
 
-                Forms\Components\Select::make('country')
-                    ->required()
-                    ->searchable()
-                    ->options(
-                        DB::table('countries')
-                            ->get()
-                            ->pluck('name', 'id')
-                    ),
+                Forms\Components\TextInput::make('country')->required(),
 
                 Forms\Components\DatePicker::make('date_of_birth')->required(),
 
@@ -56,6 +49,10 @@ class ApplicantsRelationManager extends RelationManager
                     ->maxLength(255),
 
                 Forms\Components\TextInput::make('address')
+                    ->required()
+                    ->maxLength(255),
+
+                Forms\Components\TextInput::make('address_vietnam')
                     ->required()
                     ->maxLength(255),
 

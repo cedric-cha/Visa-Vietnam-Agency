@@ -74,7 +74,7 @@ class MessageBuilder
 
     public static function instance(): self
     {
-        return new MessageBuilder();
+        return new MessageBuilder;
     }
 
     public function __toString()

@@ -16,8 +16,7 @@ class OrderProcessedNotification extends Notification implements ShouldQueue
      */
     public function __construct(
         public $order,
-    ) {
-    }
+    ) {}
 
     /**
      * Get the notification's delivery channels.
@@ -34,12 +33,20 @@ class OrderProcessedNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
+        $message = (new MailMessage)
             ->subject('Order processed')
-            ->cc('contact@visa-vietnam-agency.com')
-            ->bcc('contact@evisa-vietnam-online.com')
-            ->line('Your order '.$this->order->reference.' has been processed. Please check your email for the attachment containing your e-visa to download.')
-            ->attach(storage_path('app/public').'/'.$this->order->visa_pdf);
+            ->cc('contact@evisa-vietnam-online.com')
+            ->line('Your order '.$this->order->reference.' has been processed. Please check your email for the attachment containing your e-visa and/or fast track confirmation to download.');
+
+        if (file_exists(storage_path('app/public').'/'.$this->order->visa_pdf)) {
+            $message->attach(storage_path('app/public').'/'.$this->order->visa_pdf);
+        }
+
+        if (file_exists(storage_path('app/public').'/'.$this->order->fast_track_pdf)) {
+            $message->attach(storage_path('app/public').'/'.$this->order->fast_track_pdf);
+        }
+
+        return $message;
     }
 
     /**

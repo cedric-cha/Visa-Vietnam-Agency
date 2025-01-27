@@ -12,7 +12,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class LatestOrders extends BaseWidget
 {
-    protected static ?string $heading = 'Latest Processed Orders';
+    protected static ?string $heading = 'Latest Paid Orders';
 
     protected int|string|array $columnSpan = 'full';
 
@@ -23,7 +23,7 @@ class LatestOrders extends BaseWidget
         return $table
             ->query(
                 Order::query()
-                    ->where('status', OrderStatus::PROCESSED->value)
+                    ->where('status', OrderStatus::TRANSACTION_SUCCESS->value)
                     ->latest()
                     ->limit(5)
             )

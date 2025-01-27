@@ -59,6 +59,18 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn([
+                'arrival_date',
+                'departure_date',
+                'fast_track_entry_port_id',
+                'fast_track_date',
+                'service',
+                'purpose_id',
+                'processing_time_id',
+                'visa_type_id',
+                'time_slot_id',
+            ]);
+        });
     }
 };

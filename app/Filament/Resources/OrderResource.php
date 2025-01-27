@@ -38,6 +38,9 @@ class OrderResource extends Resource
                     ->live()
                     ->visibleOn('edit'),
 
+                Forms\Components\TextInput::make('reference')
+                    ->visibleOn('edit'),
+
                 Forms\Components\Section::make([
                     Forms\Components\Select::make('processing_time_id')
                         ->relationship('processingTime', 'description'),
@@ -56,21 +59,6 @@ class OrderResource extends Resource
 
                     Forms\Components\DatePicker::make('arrival_date'),
                     Forms\Components\DatePicker::make('departure_date'),
-
-                    Forms\Components\Select::make('status')
-                        ->options([
-                            OrderStatus::PROCESSED->value => 'Processed',
-                            OrderStatus::CANCELLED->value => 'Cancelled',
-                        ])
-                        ->live()
-                        ->visibleOn('edit'),
-
-                    Forms\Components\FileUpload::make('visa_pdf')
-                        ->disk('public')
-                        ->acceptedFileTypes(['application/pdf'])
-                        ->preserveFilenames()
-                        ->required(fn (Forms\Get $get) => $get('status') === OrderStatus::PROCESSED->value)
-                        ->visibleOn('edit'),
                 ])
                     ->columns(3),
 
@@ -82,15 +70,73 @@ class OrderResource extends Resource
                         ->searchable()
                         ->preload(),
 
-                    Forms\Components\DatePicker::make('fast_track_date'),
-
                     Forms\Components\Select::make('time_slot_id')
                         ->relationship('timeSlot')
                         ->getOptionLabelFromRecordUsing(fn (TimeSlot $record): string => $record->name.'('.$record->start_time.' to '.$record->end_time.')')
                         ->searchable()
                         ->preload(),
+
+                    Forms\Components\DatePicker::make('fast_track_date')
+                        ->label('Arrival date'),
+
+                    Forms\Components\TimePicker::make('fast_track_time')
+                        ->label('Arrival time'),
+
+                    Forms\Components\TimePicker::make('fast_track_flight_number')
+                        ->label('Arrival flight number'),
                 ])
                     ->columns(3),
+
+                Forms\Components\Section::make([
+                    Forms\Components\Select::make('fast_track_exit_port_id')
+                        ->relationship('fastTrackExitPort', modifyQueryUsing: fn (Builder $query) => $query->where('is_fast_track', 1))
+                        ->getOptionLabelFromRecordUsing(fn (EntryPort $record): string => $record->name)
+                        ->searchable()
+                        ->preload(),
+
+                    Forms\Components\Select::make('time_slot_departure_id')
+                        ->label('Time slot')
+                        ->relationship('timeSlotDeparture')
+                        ->getOptionLabelFromRecordUsing(fn (TimeSlot $record): string => $record->name.'('.$record->start_time.' to '.$record->end_time.')')
+                        ->searchable()
+                        ->preload(),
+
+                    Forms\Components\DatePicker::make('fast_track_departure_date')
+                        ->label('Departure date'),
+
+                    Forms\Components\TimePicker::make('fast_track_departure_time')
+                        ->label('Departure time'),
+
+                    Forms\Components\TimePicker::make('fast_track_flight_number_departure')
+                        ->label('Departure flight number'),
+                ])
+                    ->columns(3),
+
+                Forms\Components\Section::make([
+                    Forms\Components\Select::make('status')
+                        ->options([
+                            OrderStatus::PROCESSED->value => 'Processed',
+                            OrderStatus::CANCELLED->value => 'Cancelled',
+                        ])
+                        ->live()
+                        ->visibleOn('edit')
+                        ->columnSpanFull(),
+
+                    Forms\Components\FileUpload::make('visa_pdf')
+                        ->disk('public')
+                        ->acceptedFileTypes(['application/pdf'])
+                        ->preserveFilenames()
+                        ->required(fn (Forms\Get $get) => $get('status') === OrderStatus::PROCESSED->value)
+                        ->visibleOn('edit'),
+
+                    Forms\Components\FileUpload::make('fast_track_pdf')
+                        ->disk('public')
+                        ->acceptedFileTypes(['application/pdf'])
+                        ->preserveFilenames()
+                        ->required(fn (Forms\Get $get) => $get('status') === OrderStatus::PROCESSED->value)
+                        ->visibleOn('edit'),
+                ])
+                    ->columns()
             ])
             ->columns(3);
     }

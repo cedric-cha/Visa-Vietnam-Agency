@@ -56,7 +56,19 @@ class StoreOrderRequest extends FormRequest
             ],
             'fast_track_entry_port_id' => [
                 'sometimes',
-                Rule::requiredIf(str_contains($this->input('service'), 'fast_track')),
+                Rule::requiredIf(
+                    str_contains($this->input('service'), 'fast_track') &&
+                    ! is_null($this->input('fast_track_arrival_option'))
+                ),
+                'nullable',
+                'exists:entry_ports,id',
+            ],
+            'fast_track_exit_port_id' => [
+                'sometimes',
+                Rule::requiredIf(
+                    str_contains($this->input('service'), 'fast_track') &&
+                    ! is_null($this->input('fast_track_departure_option'))
+                ),
                 'nullable',
                 'exists:entry_ports,id',
             ],
@@ -74,19 +86,23 @@ class StoreOrderRequest extends FormRequest
                 'date',
                 'after:'.$this->input('arrival_date'),
             ],
-            'fast_track_date' => [
-                'sometimes',
-                Rule::requiredIf(str_contains($this->input('service'), 'fast_track')),
-                'nullable',
-                'date',
-                'after:today',
-            ],
             'full_name' => ['required', 'string'],
-            'country' => ['required', 'exists:countries,id'],
+            'country' => [
+                'sometimes',
+                Rule::requiredIf(str_contains($this->input('service'), 'evisa')),
+                'nullable',
+                'exists:countries,id',
+            ],
             'date_of_birth' => ['required', 'date', 'before:today'],
             'gender' => ['required', Rule::in(Gender::values())],
             'email' => ['required', 'email'],
             'address' => ['required', 'string'],
+            'address_vietnam' => [
+                'sometimes',
+                Rule::requiredIf(str_contains($this->input('service'), 'evisa')),
+                'nullable',
+                'string',
+            ],
             'phone_number' => ['required', 'string'],
             'passport_number' => ['required', 'string'],
             'passport_expiration_date' => ['required', 'date', new PassportExpiration($this)],
@@ -96,26 +112,84 @@ class StoreOrderRequest extends FormRequest
             'voucher' => ['sometimes', 'nullable', 'exists:vouchers,code'],
             'time_slot_id' => [
                 'sometimes',
-                Rule::requiredIf(str_contains($this->input('service'), 'fast_track')),
+                Rule::requiredIf(
+                    str_contains($this->input('service'), 'fast_track') &&
+                    ! is_null($this->input('fast_track_arrival_option'))
+                ),
                 'nullable',
                 'exists:time_slots,id',
             ],
-            'service' => [
-                'required',
-                Rule::in([
-                    'evisa',
-                    'fast_track',
-                    'evisa_fast_track',
-                ]),
+            'time_slot_departure_id' => [
+                'sometimes',
+                Rule::requiredIf(
+                    str_contains($this->input('service'), 'fast_track') &&
+                    ! is_null($this->input('fast_track_departure_option'))
+                ),
+                'nullable',
+                'exists:time_slots,id',
             ],
-            //'captcha' => ['required', 'captcha'],
+            'service' => ['required', Rule::in(['evisa', 'fast_track', 'evisa_fast_track'])],
+            'fast_track_flight_number' => [
+                'sometimes',
+                Rule::requiredIf(
+                    str_contains($this->input('service'), 'fast_track') &&
+                    ! is_null($this->input('fast_track_arrival_option'))
+                ),
+                'nullable',
+            ],
+            'fast_track_flight_number_departure' => [
+                'sometimes',
+                Rule::requiredIf(
+                    str_contains($this->input('service'), 'fast_track') &&
+                    ! is_null($this->input('fast_track_departure_option'))
+                ),
+                'nullable',
+            ],
+            'fast_track_time' => [
+                'sometimes',
+                Rule::requiredIf(
+                    str_contains($this->input('service'), 'fast_track') &&
+                    ! is_null($this->input('fast_track_arrival_option'))
+                ),
+                'nullable',
+            ],
+            'fast_track_date' => [
+                'sometimes',
+                Rule::requiredIf(
+                    str_contains($this->input('service'), 'fast_track') &&
+                    ! is_null($this->input('fast_track_arrival_option'))
+                ),
+                'nullable',
+                'date',
+                'after:today',
+            ],
+            'fast_track_departure_time' => [
+                'sometimes',
+                Rule::requiredIf(
+                    str_contains($this->input('service'), 'fast_track') &&
+                    ! is_null($this->input('fast_track_departure_option'))
+                ),
+                'nullable',
+            ],
+            'fast_track_departure_date' => [
+                'sometimes',
+                Rule::requiredIf(
+                    str_contains($this->input('service'), 'fast_track') &&
+                    ! is_null($this->input('fast_track_departure_option'))
+                ),
+                'nullable',
+                'date',
+                'after:today',
+            ],
+            'fast_track_arrival_option' => ['sometimes', 'nullable'],
+            'fast_track_departure_option' => ['sometimes', 'nullable'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            //'captcha.captcha' => 'Captcha is not correct.',
+            //
         ];
     }
 

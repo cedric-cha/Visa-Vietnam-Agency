@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Gender;
+use App\Enums\TimeSlotType;
 use App\Http\Requests\CheckOrderStatusRequest;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\UseCases\PaymentUseCase\PaymentUseCase;
@@ -35,11 +36,25 @@ class OrderController extends Controller
                 ->map(fn ($group) => ['type' => $group->first()->type, 'entryPorts' => $group->toArray()])
                 ->values()
                 ->all(),
-            'fastTrackEntryPorts' => EntryPort::query()
-                ->where('is_fast_track', 1)
-                ->get(),
+            'fastTrackEntryPorts' => EntryPort::all()
+                ->filter(fn (EntryPort $entryPort) => $entryPort->is_fast_track)
+                ->groupBy('type')
+                ->map(fn ($group) => ['type' => $group->first()->type, 'entryPorts' => $group->toArray()])
+                ->values()
+                ->all(),
+            'fastTrackExitPorts' => EntryPort::all()
+                ->filter(fn (EntryPort $entryPort) => $entryPort->is_fast_track)
+                ->groupBy('type')
+                ->map(fn ($group) => ['type' => $group->first()->type, 'exitPorts' => $group->toArray()])
+                ->values()
+                ->all(),
             'timeSlots' => TimeSlot::query()
                 ->select('id', 'name', 'start_time', 'end_time')
+                ->where('type', TimeSlotType::ARRIVAL->value)
+                ->get(),
+            'timeSlotsDeparture' => TimeSlot::query()
+                ->select('id', 'name', 'start_time', 'end_time')
+                ->where('type', TimeSlotType::DEPARTURE->value)
                 ->get(),
             'feedbacks' => Feedback::query()->select('id', 'title')->get(),
         ]);

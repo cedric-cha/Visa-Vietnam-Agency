@@ -17,8 +17,7 @@ class OrderPlacedAdminNotification extends Notification implements ShouldQueue
     public function __construct(
         public $order,
         public string $url,
-    ) {
-    }
+    ) {}
 
     /**
      * Get the notification's delivery channels.

@@ -9,9 +9,7 @@ use Illuminate\Http\Request;
 
 class PassportExpiration implements ValidationRule
 {
-    public function __construct(public Request $request)
-    {
-    }
+    public function __construct(public Request $request) {}
 
     /**
      * Run the validation rule.

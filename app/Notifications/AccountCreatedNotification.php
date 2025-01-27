@@ -17,8 +17,7 @@ class AccountCreatedNotification extends Notification implements ShouldQueue
     public function __construct(
         public string $url,
         public string $password
-    ) {
-    }
+    ) {}
 
     /**
      * Get the notification's delivery channels.

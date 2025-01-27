@@ -32,6 +32,7 @@ class ApplicantFactory extends Factory
             'passport_image' => 'https://tnp.straitstimes.com/sites/default/files/styles/rl680/public/articles/2017/10/27/NP_20171027_MKPASSPORT27_1649459.jpg',
             'password' => null,
             'flight_ticket_image' => 'https://c8.alamy.com/comp/2AFH819/boarding-pass-vector-illustration-airline-ticket-design-with-qr-code-2AFH819.jpg',
+            'address_vietnam' => null,
         ];
     }
 }

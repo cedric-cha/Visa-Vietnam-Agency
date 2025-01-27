@@ -13,9 +13,7 @@ class PaymentUseCase
 {
     use MakeApiResponse;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     protected function getEndPoint(): string
     {

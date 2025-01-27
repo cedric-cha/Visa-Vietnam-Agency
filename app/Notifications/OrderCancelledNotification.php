@@ -17,8 +17,7 @@ class OrderCancelledNotification extends Notification implements ShouldQueue
     public function __construct(
         public string $reference,
         public string $url,
-    ) {
-    }
+    ) {}
 
     /**
      * Get the notification's delivery channels.

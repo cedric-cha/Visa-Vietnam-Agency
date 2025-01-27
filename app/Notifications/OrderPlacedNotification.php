@@ -18,8 +18,7 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
     public function __construct(
         public $order,
         public string $url,
-    ) {
-    }
+    ) {}
 
     /**
      * Get the notification's delivery channels.
@@ -40,7 +39,6 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
             ->subject('Order placed')
             ->greeting('Xin Chào')
             ->cc('contact@visa-vietnam-agency.com')
-            ->bcc('contact@evisa-vietnam-online.com')
             ->line('Your order has been placed successfully.')
             ->line('Applicant : '.$this->order->applicant->full_name)
             ->line('Purpose : '.$this->order->purpose->description ?? 'N/A')
@@ -50,8 +48,15 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
             ->line('Arrival Date : '.$this->getArrivalDate())
             ->line('Departure Date : '.$this->getDepartureDate())
             ->line('Fast track entry port : '.$this->getFastTrackEntryPort())
-            ->line('Fast track date : '.$this->getFastTrackDate())
+            ->line('Fast track arrival date : '.$this->getFastTrackDate())
             ->line('Fast track time slot : '.$this->getTimeSlot())
+            ->line('Fast track arrival time : '.$this->order->fast_track_time ?? 'N/A')
+            ->line('Arrival flight number : '.$this->order->fast_track_flight_number ?? 'N/A')
+            ->line('Fast track exit port : '.$this->getFastTrackExitPort())
+            ->line('Fast track departure date : '.$this->getFastTrackDepartureDate())
+            ->line('Fast track time slot : '.$this->getTimeSlotDeparture())
+            ->line('Fast track departure time : '.$this->order->fast_track_departure_time ?? 'N/A')
+            ->line('Departure flight number : '.$this->order->fast_track_flight_number_departure ?? 'N/A')
             ->line('----------')
             ->line('Total Fees : $'.number_format($this->order->total_fees_with_discount ?? $this->order->total_fees, 2))
             ->line('----------')
@@ -112,6 +117,33 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
         }
 
         return $this->order->timeSlot->name.'('.$this->order->timeSlot->start_time.' to '.$this->order->timeSlot->end_time.')';
+    }
+
+    protected function getFastTrackExitPort(): string
+    {
+        if (is_null($this->order->fastTrackExitPort)) {
+            return 'N/A';
+        }
+
+        return $this->order->fastTrackExitPort->name.' ('.$this->order->fastTrackExitPort->type.')';
+    }
+
+    protected function getFastTrackDepartureDate(): string
+    {
+        if (is_null($this->order->fast_track_departure_date)) {
+            return 'N/A';
+        }
+
+        return Carbon::parse($this->order->fast_track_departure_date)->format('d M Y');
+    }
+
+    protected function getTimeSlotDeparture(): string
+    {
+        if (is_null($this->order->timeSlotDeparture)) {
+            return 'N/A';
+        }
+
+        return $this->order->timeSlotDeparture->name.'('.$this->order->timeSlotDeparture->start_time.' to '.$this->order->timeSlotDeparture->end_time.')';
     }
 
     /**
