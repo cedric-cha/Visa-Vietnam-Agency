@@ -38,6 +38,7 @@ class OrderFactory extends Factory
             'fast_track_flight_number' => null,
             'fast_track_time' => null,
             'fast_track_pdf' => null,
+            'invoice' => null,
         ];
     }
 }

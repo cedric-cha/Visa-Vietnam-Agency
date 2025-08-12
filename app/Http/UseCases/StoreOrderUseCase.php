@@ -6,6 +6,7 @@ use App\Http\Services\FileUploadService;
 use App\Http\UseCases\PaymentUseCase\PaymentUseCase;
 use App\Models\Applicant;
 use App\Models\Country;
+use App\Models\Feedback;
 use App\Models\Order;
 use App\Models\Voucher;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -24,8 +25,13 @@ class StoreOrderUseCase
         private readonly FileUploadService $fileUploadService
     ) {}
 
-    public function handle(array $data, UploadedFile $photoFile, UploadedFile $passportImageFile, UploadedFile $flightTicketImageFile): JsonResponse
-    {
+    public function handle(
+        array $data,
+        UploadedFile $photoFile,
+        UploadedFile $passportImageFile,
+        UploadedFile $flightTicketImageFile,
+        ?array $attachedImages = null
+    ): JsonResponse {
         if (! $this->fileUploadService->handle($photoFile, $photo)) {
             logger('Failed to upload photo file');
 
@@ -44,7 +50,30 @@ class StoreOrderUseCase
             return $this->errorResponse('We apologize, but there was an error processing your order. Please try again later or contact customer support for assistance.');
         }
 
-        $order = $this->storeOrder($data);
+        $attachedImagesFiles = [];
+
+        if (! is_null($attachedImages)) {
+            foreach ($attachedImages as $attachedImage) {
+                if (! $this->fileUploadService->handle($attachedImage, $filename)) {
+                    logger('Failed to upload flight ticket image file');
+
+                    return $this->errorResponse('We apologize, but there was an error processing your order. Please try again later or contact customer support for assistance.');
+                }
+
+                $attachedImagesFiles[] = $filename;
+            }
+        }
+
+        if (isset($data['feedback'])) {
+            Feedback::query()
+                ->where('id', $data['feedback'])
+                ->increment('count');
+        }
+
+        $data['phone_number'] = $data['dial_code'].$data['phone_number'];
+        unset($data['dial_code'], $data['feedback']);
+
+        $order = $this->storeOrder($data, $attachedImagesFiles);
 
         $this->storeApplicant($order, $data, $photo, $passportImage, $flightTicketImage);
 
@@ -100,7 +129,7 @@ class StoreOrderUseCase
         }
     }
 
-    protected function storeOrder(array $data): Order
+    protected function storeOrder(array $data, array $attachedImagesFiles): Order
     {
         if (! isset($data['fast_track_arrival_option'])) {
             $data['fast_track_entry_port_id'] = null;
@@ -141,6 +170,8 @@ class StoreOrderUseCase
                 'time_slot_id' => $data['time_slot_id'],
                 'time_slot_departure_id' => $data['time_slot_departure_id'],
                 'service' => $data['service'],
+                'last_visits' => isset($data['last_visits']) ? json_decode($data['last_visits'], true) : null,
+                'attached_images' => $attachedImagesFiles,
             ]);
         } catch (Exception $e) {
             report($e);

@@ -67,6 +67,7 @@ class OrderController extends Controller
             $request->file('photo'),
             $request->file('passport_image'),
             $request->file('flight_ticket_image'),
+            $request->file('attached_images'),
         );
     }
 

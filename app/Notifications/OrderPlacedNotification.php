@@ -38,7 +38,7 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject('Order placed')
             ->greeting('Xin Chào')
-            ->cc('contact@visa-vietnam-agency.com')
+            ->cc('contact@evisa-vietnam-online.com')
             ->line('Your order has been placed successfully.')
             ->line('Applicant : '.$this->order->applicant->full_name)
             ->line('Purpose : '.$this->order->purpose->description ?? 'N/A')
@@ -62,6 +62,10 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
             ->line('----------')
             ->line('Reference : '.$this->order->reference)
             ->line('Password : '.$this->order->applicant->password)
+            ->line('')
+            ->line('')
+            ->line('Find your invoice as attachment to this email.')
+            ->attach(storage_path('app/public/'.$this->order->invoice))
             ->action('Check my order status', $this->url);
     }
 

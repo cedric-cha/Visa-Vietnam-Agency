@@ -38,11 +38,11 @@ class OrderProcessedNotification extends Notification implements ShouldQueue
             ->cc('contact@evisa-vietnam-online.com')
             ->line('Your order '.$this->order->reference.' has been processed. Please check your email for the attachment containing your e-visa and/or fast track confirmation to download.');
 
-        if (file_exists(storage_path('app/public').'/'.$this->order->visa_pdf)) {
+        if (! is_null($this->order->visa_pdf) && file_exists(storage_path('app/public').'/'.$this->order->visa_pdf)) {
             $message->attach(storage_path('app/public').'/'.$this->order->visa_pdf);
         }
 
-        if (file_exists(storage_path('app/public').'/'.$this->order->fast_track_pdf)) {
+        if (! is_null($this->order->fast_track_pdf) && file_exists(storage_path('app/public').'/'.$this->order->fast_track_pdf)) {
             $message->attach(storage_path('app/public').'/'.$this->order->fast_track_pdf);
         }
 

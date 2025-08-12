@@ -17,7 +17,8 @@ class OrderObserver
             'total_fees' => ($order->purpose?->fees ?? 0) +
                 ($order->processingTime?->fees ?? 0) +
                 ($order->visaType?->fees ?? 0) +
-                ($order->timeSlot?->fees ?? 0),
+                ($order->timeSlot?->fees ?? 0) +
+                ($order->timeSlotDeparture?->fees ?? 0),
             'reference' => 'E_VISA_'.str_pad("$orderId", 10, '0', STR_PAD_LEFT).'T'.time(),
         ]);
 

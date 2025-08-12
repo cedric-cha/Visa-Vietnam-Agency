@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\Gender;
+use App\Enums\OrderServiceType;
 use App\Rules\PassportExpiration;
 use Eliseekn\LaravelApiResponse\MakeApiResponse;
 use Illuminate\Contracts\Validation\Validator;
@@ -32,32 +33,32 @@ class StoreOrderRequest extends FormRequest
         return [
             'processing_time_id' => [
                 'sometimes',
-                Rule::requiredIf(str_contains($this->input('service'), 'evisa')),
+                Rule::requiredIf(str_contains($this->input('service'), OrderServiceType::EVISA->value)),
                 'nullable',
                 'exists:processing_times,id',
             ],
             'purpose_id' => [
                 'sometimes',
-                Rule::requiredIf(str_contains($this->input('service'), 'evisa')),
+                Rule::requiredIf(str_contains($this->input('service'), OrderServiceType::EVISA->value)),
                 'nullable',
                 'exists:purposes,id',
             ],
             'visa_type_id' => [
                 'sometimes',
-                Rule::requiredIf(str_contains($this->input('service'), 'evisa')),
+                Rule::requiredIf(str_contains($this->input('service'), OrderServiceType::EVISA->value)),
                 'nullable',
                 'exists:visa_types,id',
             ],
             'entry_port_id' => [
                 'sometimes',
-                Rule::requiredIf(str_contains($this->input('service'), 'evisa')),
+                Rule::requiredIf(str_contains($this->input('service'), OrderServiceType::EVISA->value)),
                 'nullable',
                 'exists:entry_ports,id',
             ],
             'fast_track_entry_port_id' => [
                 'sometimes',
                 Rule::requiredIf(
-                    str_contains($this->input('service'), 'fast_track') &&
+                    str_contains($this->input('service'), OrderServiceType::FAST_TRACK->value) &&
                     ! is_null($this->input('fast_track_arrival_option'))
                 ),
                 'nullable',
@@ -66,7 +67,7 @@ class StoreOrderRequest extends FormRequest
             'fast_track_exit_port_id' => [
                 'sometimes',
                 Rule::requiredIf(
-                    str_contains($this->input('service'), 'fast_track') &&
+                    str_contains($this->input('service'), OrderServiceType::FAST_TRACK->value) &&
                     ! is_null($this->input('fast_track_departure_option'))
                 ),
                 'nullable',
@@ -74,14 +75,14 @@ class StoreOrderRequest extends FormRequest
             ],
             'arrival_date' => [
                 'sometimes',
-                Rule::requiredIf(str_contains($this->input('service'), 'evisa')),
+                Rule::requiredIf(str_contains($this->input('service'), OrderServiceType::EVISA->value)),
                 'nullable',
                 'date',
                 'after:today',
             ],
             'departure_date' => [
                 'sometimes',
-                Rule::requiredIf(str_contains($this->input('service'), 'evisa')),
+                Rule::requiredIf(str_contains($this->input('service'), OrderServiceType::EVISA->value)),
                 'nullable',
                 'date',
                 'after:'.$this->input('arrival_date'),
@@ -89,7 +90,7 @@ class StoreOrderRequest extends FormRequest
             'full_name' => ['required', 'string'],
             'country' => [
                 'sometimes',
-                Rule::requiredIf(str_contains($this->input('service'), 'evisa')),
+                Rule::requiredIf(str_contains($this->input('service'), OrderServiceType::EVISA->value)),
                 'nullable',
                 'exists:countries,id',
             ],
@@ -99,7 +100,7 @@ class StoreOrderRequest extends FormRequest
             'address' => ['required', 'string'],
             'address_vietnam' => [
                 'sometimes',
-                Rule::requiredIf(str_contains($this->input('service'), 'evisa')),
+                Rule::requiredIf(str_contains($this->input('service'), OrderServiceType::EVISA->value)),
                 'nullable',
                 'string',
             ],
@@ -113,7 +114,7 @@ class StoreOrderRequest extends FormRequest
             'time_slot_id' => [
                 'sometimes',
                 Rule::requiredIf(
-                    str_contains($this->input('service'), 'fast_track') &&
+                    str_contains($this->input('service'), OrderServiceType::FAST_TRACK->value) &&
                     ! is_null($this->input('fast_track_arrival_option'))
                 ),
                 'nullable',
@@ -122,17 +123,17 @@ class StoreOrderRequest extends FormRequest
             'time_slot_departure_id' => [
                 'sometimes',
                 Rule::requiredIf(
-                    str_contains($this->input('service'), 'fast_track') &&
+                    str_contains($this->input('service'), OrderServiceType::FAST_TRACK->value) &&
                     ! is_null($this->input('fast_track_departure_option'))
                 ),
                 'nullable',
                 'exists:time_slots,id',
             ],
-            'service' => ['required', Rule::in(['evisa', 'fast_track', 'evisa_fast_track'])],
+            'service' => ['required', Rule::in(OrderServiceType::values())],
             'fast_track_flight_number' => [
                 'sometimes',
                 Rule::requiredIf(
-                    str_contains($this->input('service'), 'fast_track') &&
+                    str_contains($this->input('service'), OrderServiceType::FAST_TRACK->value) &&
                     ! is_null($this->input('fast_track_arrival_option'))
                 ),
                 'nullable',
@@ -140,7 +141,7 @@ class StoreOrderRequest extends FormRequest
             'fast_track_flight_number_departure' => [
                 'sometimes',
                 Rule::requiredIf(
-                    str_contains($this->input('service'), 'fast_track') &&
+                    str_contains($this->input('service'), OrderServiceType::FAST_TRACK->value) &&
                     ! is_null($this->input('fast_track_departure_option'))
                 ),
                 'nullable',
@@ -148,7 +149,7 @@ class StoreOrderRequest extends FormRequest
             'fast_track_time' => [
                 'sometimes',
                 Rule::requiredIf(
-                    str_contains($this->input('service'), 'fast_track') &&
+                    str_contains($this->input('service'), OrderServiceType::FAST_TRACK->value) &&
                     ! is_null($this->input('fast_track_arrival_option'))
                 ),
                 'nullable',
@@ -156,7 +157,7 @@ class StoreOrderRequest extends FormRequest
             'fast_track_date' => [
                 'sometimes',
                 Rule::requiredIf(
-                    str_contains($this->input('service'), 'fast_track') &&
+                    str_contains($this->input('service'), OrderServiceType::FAST_TRACK->value) &&
                     ! is_null($this->input('fast_track_arrival_option'))
                 ),
                 'nullable',
@@ -166,7 +167,7 @@ class StoreOrderRequest extends FormRequest
             'fast_track_departure_time' => [
                 'sometimes',
                 Rule::requiredIf(
-                    str_contains($this->input('service'), 'fast_track') &&
+                    str_contains($this->input('service'), OrderServiceType::FAST_TRACK->value) &&
                     ! is_null($this->input('fast_track_departure_option'))
                 ),
                 'nullable',
@@ -174,7 +175,7 @@ class StoreOrderRequest extends FormRequest
             'fast_track_departure_date' => [
                 'sometimes',
                 Rule::requiredIf(
-                    str_contains($this->input('service'), 'fast_track') &&
+                    str_contains($this->input('service'), OrderServiceType::FAST_TRACK->value) &&
                     ! is_null($this->input('fast_track_departure_option'))
                 ),
                 'nullable',
@@ -183,6 +184,18 @@ class StoreOrderRequest extends FormRequest
             ],
             'fast_track_arrival_option' => ['sometimes', 'nullable'],
             'fast_track_departure_option' => ['sometimes', 'nullable'],
+            'dial_code' => 'required',
+            'last_visits' => [
+                'sometimes',
+                Rule::requiredIf(str_contains($this->input('service'), OrderServiceType::EVISA->value)),
+                'nullable',
+            ],
+            'attached_images' => [
+                'sometimes',
+                Rule::requiredIf(str_contains($this->input('service'), OrderServiceType::EVISA->value)),
+                'nullable',
+            ],
+            'feedback' => ['sometimes', 'nullable', 'exists:feedback,id'],
         ];
     }
 

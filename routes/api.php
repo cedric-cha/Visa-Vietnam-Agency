@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\IncrementFeedbackValueController;
 use App\Http\Controllers\VoucherController;
 use App\Models\EntryPort;
 use App\Models\ProcessingTime;
@@ -39,4 +38,3 @@ Route::get('/time-slots/{id?}', function (Request $request, ?int $id = null) {
 })->whereNumber('id');
 
 Route::get('/voucher/{code}', VoucherController::class)->whereAlphaNumeric('code');
-Route::get('/feedback/{feedback}', IncrementFeedbackValueController::class);

@@ -14,6 +14,7 @@ use Filament\Forms\Form;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -113,6 +114,30 @@ class OrderResource extends Resource
                     ->columns(3),
 
                 Forms\Components\Section::make([
+                    Forms\Components\Repeater::make('last_visits')
+                        ->schema([
+                            Forms\Components\DatePicker::make('from'),
+                            Forms\Components\DatePicker::make('to'),
+                            Forms\Components\TextInput::make('purpose'),
+                        ])
+                        ->addActionLabel('Add visit')
+                        ->reorderable(false)
+                        ->addActionAlignment(Alignment::Start)
+                        ->columns(3),
+
+                    Forms\Components\FileUpload::make('attached_images')
+                        ->disk('public')
+                        ->multiple()
+                        ->preserveFilenames()
+                        ->image()
+                        ->imageEditor()
+                        ->panelLayout('grid')
+                        ->appendFiles()
+                        ->downloadable()
+                        ->maxFiles(3),
+                ]),
+
+                Forms\Components\Section::make([
                     Forms\Components\Select::make('status')
                         ->options([
                             OrderStatus::PROCESSED->value => 'Processed',
@@ -125,18 +150,22 @@ class OrderResource extends Resource
                     Forms\Components\FileUpload::make('visa_pdf')
                         ->disk('public')
                         ->acceptedFileTypes(['application/pdf'])
-                        ->preserveFilenames()
-                        ->required(fn (Forms\Get $get) => $get('status') === OrderStatus::PROCESSED->value)
+                        ->required(function (Forms\Get $get) {
+                            return $get('status') === OrderStatus::PROCESSED->value &&
+                                str_contains($get('service'), OrderServiceType::EVISA->value);
+                        })
                         ->visibleOn('edit'),
 
                     Forms\Components\FileUpload::make('fast_track_pdf')
                         ->disk('public')
                         ->acceptedFileTypes(['application/pdf'])
-                        ->preserveFilenames()
-                        ->required(fn (Forms\Get $get) => $get('status') === OrderStatus::PROCESSED->value)
+                        ->required(function (Forms\Get $get) {
+                            return $get('status') === OrderStatus::PROCESSED->value &&
+                                str_contains($get('service'), OrderServiceType::FAST_TRACK->value);
+                        })
                         ->visibleOn('edit'),
                 ])
-                    ->columns()
+                    ->columns(),
             ])
             ->columns(3);
     }
@@ -150,9 +179,11 @@ class OrderResource extends Resource
                     ->icon('heroicon-m-calendar')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('reference')->searchable(),
+                Tables\Columns\TextColumn::make('reference')
+                    ->sortable()
+                    ->searchable(),
 
-                Tables\Columns\TextColumn::make('applicant.ful_name')
+                Tables\Columns\TextColumn::make('applicant.full_name')
                     ->state(fn (Order $record) => $record->applicant?->full_name)
                     ->sortable()
                     ->searchable(),
@@ -175,16 +206,12 @@ class OrderResource extends Resource
 
                 Tables\Columns\TextColumn::make('total_fees')
                     ->money('USD')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('total_fees_with_discount')
                     ->money('USD')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
-                    ->sortable()
-                    ->default('-'),
+                    ->default('-')
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
@@ -215,6 +242,10 @@ class OrderResource extends Resource
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
                     Tables\Actions\ViewAction::make(),
+                    Tables\Actions\Action::make('invoice')
+                        ->icon('heroicon-m-document')
+                        ->url(fn (Order $record): string => url('storage/'.$record->invoice))
+                        ->openUrlInNewTab(),
                 ]),
             ])
             ->bulkActions([

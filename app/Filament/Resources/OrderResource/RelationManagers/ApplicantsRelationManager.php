@@ -115,6 +115,7 @@ class ApplicantsRelationManager extends RelationManager
                             ->find($record->country, ['name'])
                             ?->name;
                     })
+                    ->default('-')
                     ->icon('heroicon-m-map-pin')
                     ->toggleable()
                     ->toggledHiddenByDefault()

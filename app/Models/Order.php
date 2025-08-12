@@ -21,6 +21,8 @@ class Order extends Model
         'voucher',
         'timeSlot',
         'fastTrackEntryPort',
+        'fastTrackExitPort',
+        'timeSlotDeparture',
     ];
 
     protected $fillable = [
@@ -47,7 +49,15 @@ class Order extends Model
         'fast_track_exit_port_id',
         'fast_track_departure_date',
         'fast_track_departure_time',
-        'fast_track_pdf'
+        'fast_track_pdf',
+        'invoice',
+        'attached_images',
+        'last_visits',
+    ];
+
+    protected $casts = [
+        'attached_images' => 'array',
+        'last_visits' => 'array',
     ];
 
     public function applicant(): HasOne
@@ -98,5 +108,10 @@ class Order extends Model
     public function timeSlotDeparture(): BelongsTo
     {
         return $this->belongsTo(TimeSlot::class, 'time_slot_departure_id');
+    }
+
+    public function hasService(string $service): bool
+    {
+        return str_contains($this->service, $service);
     }
 }

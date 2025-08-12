@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Events\OrderCancelled;
 use App\Events\OrderProcessed;
 use App\Events\OrderTransactionSucceeded;
+use App\Listeners\GenerateInvoice;
 use App\Listeners\SendOrderCancelledNotification;
 use App\Listeners\SendOrderProcessedNotification;
 use App\Listeners\SendOrderTransactionSucceededNotification;
@@ -39,6 +40,7 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         OrderTransactionSucceeded::class => [
+            GenerateInvoice::class,
             SendOrderTransactionSucceededNotification::class,
         ],
     ];
